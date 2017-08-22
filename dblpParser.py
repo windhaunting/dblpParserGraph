@@ -39,7 +39,7 @@ class parserDblpXmlCls:
     
     
     #Parser xml    
-    def readParserXMl(self, context, func, *args, **kwargs):
+    def readParserXMl(self, context, fd):
         collaborations = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
         authors = blist()
         title = ""
@@ -55,7 +55,7 @@ class parserDblpXmlCls:
                     for a in authors:
                         #func(a+"||"+title, *args)
                         inList = [a, title, "same"]
-                        func(inList, *args, **kwargs)
+                        writeListRowToFileWriterTsv(fd, inList, '\t')
                     title = ''
                     del authors[:]
             elem.clear()
@@ -75,7 +75,7 @@ def main():
     fd = open(outEdgeListFile, 'w')
 
     context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
-    parseDblpXmlObj.readParserXMl(context, writeListRowToFileWriterTsv, fd, '\t')
+    parseDblpXmlObj.readParserXMl(context, fd)
     
     
 if __name__== "__main__":
