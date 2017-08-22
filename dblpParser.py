@@ -15,6 +15,8 @@ from blist import blist
 from lxml import etree
 from unidecode import unidecode
 
+from commons import writeListRowToFileWriterTsv
+
 
 class nodeType:
     peopleType = 1
@@ -48,12 +50,17 @@ class parserDblpXmlCls:
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text)  
-        if elem.tag in collaborations:
-            if len(authors) is not 0 and title is not '':
-                for a in authors:
-                    func(a+"||"+title, *args, **kwargs)
-                title = ''
-                del authors[:]
+            if elem.tag in collaborations:
+                if len(authors) is not 0 and title is not '':
+                    for a in authors:
+                        #func(a+"||"+title, *args)
+                        inList = [a, title, "same"]
+                        func(inList, *args, **kwargs)
+                    title = ''
+                    del authors[:]
+            elem.clear()
+        
+        del context        
 
     def writeElementPair(self, elem, fout):
         print ("writing ... " + elem)
@@ -65,10 +72,10 @@ def main():
     parseDblpXmlObj = parserDblpXmlCls()
     
     outEdgeListFile = "output/outEdgeListFile.tsv"
-    fout = open(outEdgeListFile, 'w')
+    fd = open(outEdgeListFile, 'w')
 
     context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
-    parseDblpXmlObj.readParserXMl(context, parseDblpXmlObj.writeElementPair, fout)
+    parseDblpXmlObj.readParserXMl(context, writeListRowToFileWriterTsv, fd, '\t')
     
     
 if __name__== "__main__":
