@@ -21,13 +21,18 @@ class nodeType:
     PaperType = 5             #paper
     TimeType = 6
     
-class graphCreationClass:
-    startNodeId = 1            #graph node Id starting from 1
+class parserDblpXml:
+    startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}            #store node name+type -> ID map
     gNodeIdToNameMap  = {}               #store node id -> name  map
     
     graNodeTypeMap = {}                 #node id to type
     edgeList = blist()                       #graph edge list  "nodeId, nodeId, edge"
+    
     def __init__(self):
       pass
-      
+     
+        
+    def readParserXMl():
+        collaborations = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
+        
