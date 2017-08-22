@@ -6,21 +6,20 @@ Created on Fri Aug 18 23:52:30 2017
 @author: fubao
 """
 
-#main function for parser
+#function for parser dblp xml
 import os
 import numpy as np
 import pandas as pd
 from blist import blist
-
-from readCityState import readcitySatesExecute
-from extractweatherData import readUSAStationIdToNameMap
+from lxml import etree
 
 class nodeType:
-    placeType = 1
-    timeType = 2             #time type, year, month or day time
-    tempType = 3             #temperature range
-    prcpType = 4             #precipation
-    snowType = 5             #snow depth
+    peopleType = 1
+    topicType = 2             #topic
+    titleType = 3             #title
+    venueType = 4             #venue
+    PaperType = 5             #paper
+    TimeType = 6
     
 class graphCreationClass:
     startNodeId = 1            #graph node Id starting from 1
