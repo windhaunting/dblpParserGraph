@@ -35,4 +35,6 @@ class parserDblpXml:
         
     def readParserXMl():
         collaborations = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
-        
+        author_array = blist()
+        title = ""
+        venues = [u'note', u'journal', u'publisher', u'url']
