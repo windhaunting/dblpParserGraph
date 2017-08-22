@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from blist import blist
 from lxml import etree
+from unidecode import unidecode
 
 class nodeType:
     peopleType = 1
@@ -21,7 +22,7 @@ class nodeType:
     PaperType = 5             #paper
     TimeType = 6
     
-class parserDblpXml:
+class parserDblpXmlCls:
     startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}            #store node name+type -> ID map
     gNodeIdToNameMap  = {}               #store node id -> name  map
@@ -33,8 +34,25 @@ class parserDblpXml:
       pass
      
         
-    def readParserXMl():
+    def readParserXMl(context):
         collaborations = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
         author_array = blist()
         title = ""
         venues = [u'note', u'journal', u'publisher', u'url']
+        for event, elem in context:
+            if elem.tag == 'author':
+                author_array.append(unidecode(elem.text))
+            if elem.tag == 'title':
+                if elem.text:
+    	               title = unidecode(elem.text)  
+        if elem.tag in collaborations:
+            if len(author_array) is not 0 and title is not '':
+                func(a+"||"+title, *args, **kwargs)
+                
+def main():
+    
+    parseDblpXmlObj = parserDblpXmlCls()
+    
+if __name__== "__main__":
+  main()
+  
