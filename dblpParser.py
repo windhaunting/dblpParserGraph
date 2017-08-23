@@ -21,10 +21,10 @@ from commons import writeListRowToFileWriterTsv
 class nodeType:
     peopleType = 1
     topicType = 2             #topic
-    titleType = 3             #title
+    PaperType = 3             #paper title
     venueType = 4             #venue
-    PaperType = 5             #paper
-    TimeType = 6
+    TimeType = 5             #Time  month/year
+    Type = 6
     
 class parserDblpXmlCls:
     startNodeId = 1                      #graph node Id starting from 1
@@ -53,9 +53,13 @@ class parserDblpXmlCls:
             if elem.tag in collaborations:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
-                        #func(a+"||"+title, *args)
+                        # author -- paper
                         inList = [a, title, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
+                        inList = [title, a, "same"]
+                        writeListRowToFileWriterTsv(fd, inList, '\t')
+
+                    #write
                     title = ''
                     del authors[:]
             elem.clear()
