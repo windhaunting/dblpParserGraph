@@ -52,16 +52,19 @@ class parserDblpXmlCls:
     	               title = unidecode(elem.text)  
             if elem.tag in collaborations:
                 if len(authors) is not 0 and title is not '':
-                    for i, a  in enumerate(authors):
+                    for a in authors:
                         # author <--> paper
                         inList = [a, title, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                         inList = [title, a, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
-                        
-                        if 
+                         
                     #author <--> author 
-                    
+                    for a1 in authors:
+                        for a2 in authors:
+                            if a1 != a2:
+                                inList = [a1, a2, 'same']
+                                
                     title = ''
                     del authors[:]
             elem.clear()
