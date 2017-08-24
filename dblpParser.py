@@ -23,7 +23,7 @@ class nodeType:
     topicType = 2             #topic
     PaperType = 3             #paper title
     venueType = 4             #venue
-    TimeType = 5             #Time  month/year
+    TimeType = 5              #Time  month/year
     Type = 6
     
 class parserDblpXmlCls:
@@ -52,14 +52,16 @@ class parserDblpXmlCls:
     	               title = unidecode(elem.text)  
             if elem.tag in collaborations:
                 if len(authors) is not 0 and title is not '':
-                    for a in authors:
-                        # author -- paper
+                    for i, a  in enumerate(authors):
+                        # author <--> paper
                         inList = [a, title, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                         inList = [title, a, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
-
-                    #write
+                        
+                        if 
+                    #author <--> author 
+                    
                     title = ''
                     del authors[:]
             elem.clear()
