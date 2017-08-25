@@ -64,7 +64,9 @@ class parserDblpXmlCls:
                         for a2 in authors:
                             if a1 != a2:
                                 inList = [a1, a2, 'same']
-                                
+                                writeListRowToFileWriterTsv(fd, inList, '\t')
+                                inList = [a2, a1, 'same']
+                                writeListRowToFileWriterTsv(fd, inList, '\t')
                     title = ''
                     del authors[:]
             elem.clear()
