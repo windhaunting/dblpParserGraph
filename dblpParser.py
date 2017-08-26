@@ -27,7 +27,7 @@ class nodeType(object):
     #venueType = 4             #venue
     timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesMap = {mediaTypeLst[j-1] : j+affilType for j in range(1, len(mediaTypeLst)+1)}   #
+    mediaTypesMap = {mediaTypeLst[j-1] : j+5 for j in range(1, len(mediaTypeLst)+1)}   #
    
 
 class parserDblpXmlCls:
@@ -53,7 +53,7 @@ class parserDblpXmlCls:
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text) 
-            if elem.tags in mediaTypeLst:
+            if elem.tag in mediaTypeLst:
                 if elem.text:
                     mediaTypeName = unidecode(elem.text)                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
