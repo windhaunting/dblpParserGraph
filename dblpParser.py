@@ -19,7 +19,8 @@ from commons import writeListRowToFileWriterTsv
 
 
 mediaTypeLst = ['www', 'phdthesis', 'inproceedings', 'incollection', 'proceedings', 'book', 'mastersthesis', 'article']
-
+correspondenceMap = {'www': 'url', 'phdthesis': 'school',  'inproceedings': 'booktitle',
+                     'incollection': 'booktitle', 'proceedings':}
 class nodeType(object):
     peopleType = 1            #people type-- author
     paperType = 2             #paper title
