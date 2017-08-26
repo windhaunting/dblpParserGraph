@@ -20,14 +20,14 @@ from commons import writeListRowToFileWriterTsv
 
 mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
 
-class nodeType:
+class nodeType(object):
     peopleType = 1            #people type-- author
     paperType = 2             #paper title
     topicType = 3             #topic
     #venueType = 4             #venue
     timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesMap = {mediaTypeLst[j-1] : j+timeType for j in range(1, len(mediaTypeLst)+1)}   #
+    mediaTypesMap = {mediaTypeLst[j-1] : j+affilType for j in range(1, len(mediaTypeLst)+1)}   #
    
 
 class parserDblpXmlCls:
