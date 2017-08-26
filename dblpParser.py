@@ -18,7 +18,7 @@ from unidecode import unidecode
 from commons import writeListRowToFileWriterTsv
 
 
-mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
+mediaTypeLst = ['www', 'phdthesis', 'inproceedings', 'incollection', 'proceedings', 'book', 'mastersthesis', 'article']
 
 class nodeType(object):
     peopleType = 1            #people type-- author
@@ -46,6 +46,7 @@ class parserDblpXmlCls:
     def readParserXMl(self, context, fd):
         authors = blist()
         title = ""
+        mediaTypeName = ""
         #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
@@ -57,6 +58,7 @@ class parserDblpXmlCls:
                 if elem.text:
                     mediaTypeName = unidecode(elem.text).lower().strip()                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
+                print ("media TypeName: ", mediaTypeName, elem.tag)
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
@@ -80,7 +82,6 @@ class parserDblpXmlCls:
                     
                 #paper title --> mediaTypeName
                 if len(mediaTypeName) is not 0 and title is not '':
-                    print ("media TypeName: ", mediaTypeName)
                     nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesMap[mediaTypeName]) + ")"
                     nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                     inList = [nodeM, nodeTitle, 'higher']
@@ -89,6 +90,7 @@ class parserDblpXmlCls:
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     
                     title = ''
+                    mediaTypeName = ""
                     del authors[:]
             elem.clear()
         
@@ -104,8 +106,9 @@ def main():
     parseDblpXmlObj = parserDblpXmlCls()
     
     outEdgeListFile = "output/outEdgeListFile.tsv"
-    fd = open(outEdgeListFile, 'w')
-
+    os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
+    fd = open(outEdgeListFile, 'a')
+    
     context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context, fd)
     
