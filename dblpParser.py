@@ -20,15 +20,14 @@ from commons import writeListRowToFileWriterTsv
 
 mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
 
-
 class nodeType:
-    peopleType = 1
-    PaperType = 3             #paper title
+    peopleType = 1            #people type-- author
+    PaperType = 2             #paper title
     topicType = 3             #topic
     #venueType = 4             #venue
     TimeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypes = {mediaTypeLst[j-1] : j+TimeType for j in range(1, len(mediaTypeLst)+1)}
+    mediaTypesMap = {mediaTypeLst[j-1] : j+TimeType for j in range(1, len(mediaTypeLst)+1)}   #
    
 
 class parserDblpXmlCls:
@@ -47,14 +46,14 @@ class parserDblpXmlCls:
     def readParserXMl(self, context, fd):
         authors = blist()
         title = ""
-        mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
+        #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
                 authors.append(unidecode(elem.text))
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text) 
-            if elem.tags in mediaTypeTags:
+            if elem.tags in mediaTypeLst:
                 if elem.text:
                     mediaTypeName = unidecode(elem.text)                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
@@ -79,11 +78,11 @@ class parserDblpXmlCls:
                                 inList = [nodeA2, nodeA1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
-                    #paper title --> mediaTypeName
+                #paper title --> mediaTypeName
                 if len(mediaTypeName) != 0 and title is not '':
-                    nodeM = mediaTypeName + "("+ str(nodeType.PaperType) + ")"
+                    nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesMap[mediaTypeName]) + ")"
                     nodeTitle = title + "("+ str(nodeType.PaperType) + ")"
-
+                    
                         
                     title = ''
                     del authors[:]
