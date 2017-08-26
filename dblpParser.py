@@ -23,10 +23,11 @@ mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proce
 
 class nodeType:
     peopleType = 1
-    topicType = 2             #topic
     PaperType = 3             #paper title
+    topicType = 3             #topic
     #venueType = 4             #venue
     TimeType = 4              #Time  month/year
+    affilType = 5             #author affiliation
     mediaTypes = {mediaTypeLst[j-1] : j+TimeType for j in range(1, len(mediaTypeLst)+1)}
    
 
@@ -60,7 +61,9 @@ class parserDblpXmlCls:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
-                        inList = [a, title, "same"]
+                        nodeA = a + "("+ str(nodeType.peopleType) + ")"
+                        nodeTitle = a + "("+ str(nodeType.peopleType) + ")"
+                        inList = [a + , title, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                         inList = [title, a, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
