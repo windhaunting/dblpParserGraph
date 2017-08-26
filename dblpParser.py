@@ -80,7 +80,10 @@ class parserDblpXmlCls:
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
                     #paper title --> mediaTypeName
-                    if ele.tag in mediaTypeNames:
+                if len(mediaTypeName) != 0 and title is not '':
+                    nodeM = mediaTypeName + "("+ str(nodeType.PaperType) + ")"
+                    nodeTitle = title + "("+ str(nodeType.PaperType) + ")"
+
                         
                     title = ''
                     del authors[:]
