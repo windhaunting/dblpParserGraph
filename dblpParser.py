@@ -27,7 +27,7 @@ class nodeType(object):
     #venueType = 4             #venue
     timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesMap = {mediaTypeLst[j-1] : j+5 for j in range(1, len(mediaTypeLst)+1)}   #
+    mediaTypesMap = {mediaTypeLst[j-1]:j+5 for j in range(1, len(mediaTypeLst)+1)}   #
    
 
 class parserDblpXmlCls:
@@ -49,13 +49,13 @@ class parserDblpXmlCls:
         #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
-                authors.append(unidecode(elem.text))
+                authors.append(unidecode(elem.text).lower().strip())
             if elem.tag == 'title':
                 if elem.text:
-    	               title = unidecode(elem.text) 
+    	               title = unidecode(elem.text).lower().strip() 
             if elem.tag in mediaTypeLst:
                 if elem.text:
-                    mediaTypeName = unidecode(elem.text)                 #specific conference, journal name
+                    mediaTypeName = unidecode(elem.text).lower().strip()                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
@@ -79,7 +79,8 @@ class parserDblpXmlCls:
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
                 #paper title --> mediaTypeName
-                if len(mediaTypeName) != 0 and title is not '':
+                if len(mediaTypeName) is not 0 and title is not '':
+                    print ("media TypeName: ", mediaTypeName)
                     nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesMap[mediaTypeName]) + ")"
                     nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                     inList = [nodeM, nodeTitle, 'higher']
