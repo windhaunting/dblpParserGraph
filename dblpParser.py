@@ -22,12 +22,12 @@ mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proce
 
 class nodeType:
     peopleType = 1            #people type-- author
-    PaperType = 2             #paper title
+    paperType = 2             #paper title
     topicType = 3             #topic
     #venueType = 4             #venue
-    TimeType = 4              #Time  month/year
+    timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesMap = {mediaTypeLst[j-1] : j+TimeType for j in range(1, len(mediaTypeLst)+1)}   #
+    mediaTypesMap = {mediaTypeLst[j-1] : j+timeType for j in range(1, len(mediaTypeLst)+1)}   #
    
 
 class parserDblpXmlCls:
@@ -61,7 +61,7 @@ class parserDblpXmlCls:
                     for a in authors:
                         # author <--> paper
                         nodeA = a + "("+ str(nodeType.peopleType) + ")"
-                        nodeTitle = title + "("+ str(nodeType.PaperType) + ")"
+                        nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                         inList = [nodeA, nodeTitle, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                         inList = [nodeTitle, nodeA, "same"]
@@ -81,12 +81,12 @@ class parserDblpXmlCls:
                 #paper title --> mediaTypeName
                 if len(mediaTypeName) != 0 and title is not '':
                     nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesMap[mediaTypeName]) + ")"
-                    nodeTitle = title + "("+ str(nodeType.PaperType) + ")"
+                    nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                     inList = [nodeM, nodeTitle, 'higher']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeM, 'lower']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
-                        
+                    
                     title = ''
                     del authors[:]
             elem.clear()
