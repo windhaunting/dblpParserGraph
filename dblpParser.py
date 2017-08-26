@@ -56,29 +56,32 @@ class parserDblpXmlCls:
     	               title = unidecode(elem.text) 
             if elem.tags in mediaTypeTags:
                 if elem.text:
-                    mediaTypeNames.append(unidecode(elem.text))                 #specific conference, journal name
+                    mediaTypeName = unidecode(elem.text)                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
                         nodeA = a + "("+ str(nodeType.peopleType) + ")"
-                        nodeTitle = a + "("+ str(nodeType.peopleType) + ")"
-                        inList = [a + , title, "same"]
+                        nodeTitle = title + "("+ str(nodeType.PaperType) + ")"
+                        inList = [nodeA, nodeTitle, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
-                        inList = [title, a, "same"]
+                        inList = [nodeTitle, nodeA, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                          
                     #author <--> author 
                     for a1 in authors:
                         for a2 in authors:
                             if a1 != a2:
-                                inList = [a1, a2, 'same']
+                                nodeA1 = a1 + "("+ str(nodeType.peopleType) + ")"
+                                nodeA2 = a2 + "("+ str(nodeType.peopleType) + ")"
+                                inList = [nodeA1, nodeA2, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
-                                inList = [a2, a1, 'same']
+                                inList = [nodeA2, nodeA1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
                     #paper title --> mediaTypeName
-                    mediaTypeNames = []
+                    if ele.tag in mediaTypeNames:
+                        
                     title = ''
                     del authors[:]
             elem.clear()
