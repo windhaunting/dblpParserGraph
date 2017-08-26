@@ -67,6 +67,7 @@ class parserDblpXmlCls:
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                                 inList = [a2, a1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
+                                
                     title = ''
                     del authors[:]
             elem.clear()
