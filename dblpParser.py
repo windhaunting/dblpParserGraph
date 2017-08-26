@@ -18,14 +18,18 @@ from unidecode import unidecode
 from commons import writeListRowToFileWriterTsv
 
 
+mediaTypeLst = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
+
+
 class nodeType:
     peopleType = 1
     topicType = 2             #topic
     PaperType = 3             #paper title
-    venueType = 4             #venue
-    TimeType = 5              #Time  month/year
-    Type = 6
-    
+    #venueType = 4             #venue
+    TimeType = 4              #Time  month/year
+    mediaTypes = {mediaTypeLst[j-1] : j+TimeType for j in range(1, len(mediaTypeLst)+1)}
+   
+
 class parserDblpXmlCls:
     startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}            #store node name+type -> ID map
@@ -40,10 +44,9 @@ class parserDblpXmlCls:
     
     #Parser xml    
     def readParserXMl(self, context, fd):
-        collaborations = [u'www', u'phdthesis', u'inproceedings', u'incollection', u'proceedings', u'book', u'mastersthesis', u'article']
         authors = blist()
         title = ""
-        venueString = 'url'            #  [u'note', u'journal', u'publisher', u'url']
+        mediaTypeString = 'url'            #  [u'note', u'journal', u'publisher', u'url']
         for event, elem in context:
             if elem.tag == 'author':
                 authors.append(unidecode(elem.text))
@@ -67,7 +70,8 @@ class parserDblpXmlCls:
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                                 inList = [a2, a1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
-                                
+                    
+                    #author
                     title = ''
                     del authors[:]
             elem.clear()
