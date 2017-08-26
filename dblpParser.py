@@ -18,9 +18,10 @@ from unidecode import unidecode
 from commons import writeListRowToFileWriterTsv
 
 
-mediaTypeLst = ['www', 'phdthesis', 'inproceedings', 'incollection', 'proceedings', 'book', 'mastersthesis', 'article']
+#mediaTypeLst = ['www', 'phdthesis', 'inproceedings', 'incollection', 'proceedings', 'book', 'mastersthesis', 'article']
 mediaTypeLstMap = {'www': 'url', 'phdthesis': 'school',  'inproceedings': 'booktitle',
-                     'incollection': 'booktitle', 'proceedings':'booktitle', 'book':}              #media type and its content, conference, journal etc
+                   'incollection': 'booktitle', 'proceedings':'booktitle', 'book': 'publisher',
+                   'mastersthesis': 'school', 'article': 'journal'}              #media type and its content, conference, journal etc
 #node type for graph
 
 class nodeType(object):
@@ -30,7 +31,7 @@ class nodeType(object):
     #venueType = 4             #venue
     timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesMap = {mediaTypeLst[j-1]:j+5 for j in range(1, len(mediaTypeLst)+1)}   #
+    mediaTypesIdMap = {mediaTypeLstMap[j-1]:j+5 for j in range(1, len(mediaTypeLst)+1)}   # mediatype to id
    
 
 class parserDblpXmlCls:
@@ -57,10 +58,11 @@ class parserDblpXmlCls:
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text).lower().strip() 
-            if elem.tag in mediaTypeLst:
+            if elem.tag in mediaTypeLstMap:
                 if elem.text:
-                    mediaTypeName = unidecode(elem.text).lower().strip()                 #specific conference, journal name
-            if elem.tag in mediaTypeLst:
+                    mediaType= unidecode(elem.tage).lower().strip()                 #specific conference, journal name
+            
+            if elem.tag in mediaTypeLstMap:
                 print ("media TypeName: ", mediaTypeName, elem.tag)
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
@@ -85,7 +87,7 @@ class parserDblpXmlCls:
                     
                 #paper title --> mediaTypeName
                 if len(mediaTypeName) is not 0 and title is not '':
-                    nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesMap[mediaTypeName]) + ")"
+                    nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesIdMap[mediaTypeName]) + ")"
                     nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                     inList = [nodeM, nodeTitle, 'higher']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
