@@ -43,7 +43,7 @@ class parserDblpXmlCls:
       pass
     
     
-    #Parser xml    
+    #Parser dblp xml file
     def readParserXMl(self, context, fd):
         authors = blist()
         title = ""
