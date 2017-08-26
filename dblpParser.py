@@ -46,13 +46,16 @@ class parserDblpXmlCls:
     def readParserXMl(self, context, fd):
         authors = blist()
         title = ""
-        mediaTypeString =  [u'booktitle', u'journal', u'publisher', ]
+        mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
                 authors.append(unidecode(elem.text))
             if elem.tag == 'title':
                 if elem.text:
-    	               title = unidecode(elem.text)  
+    	               title = unidecode(elem.text) 
+            if elem.tags in mediaTypeTags:
+                if elem.text:
+                    mediaTypeNames.append(unidecode(elem.text))                 #specific conference, journal name
             if elem.tag in mediaTypeLst:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
@@ -71,7 +74,8 @@ class parserDblpXmlCls:
                                 inList = [a2, a1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
-                    #author
+                    #paper title --> mediaTypeName
+                    mediaTypeNames = []
                     title = ''
                     del authors[:]
             elem.clear()
