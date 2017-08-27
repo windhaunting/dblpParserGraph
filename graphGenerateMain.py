@@ -14,7 +14,7 @@ from commons import writeListRowToFileWriterTsv
 from dblpParser import nodeTypeCls
 
 
-class parserDblpXmlCls:
+class graphCombineConferenceTopic:
     startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}           #store node name+type -> ID map
     gNodeIdToNameMap  = {}               #store node id -> name  map

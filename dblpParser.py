@@ -171,10 +171,10 @@ class parserDblpXmlCls:
     def writeIntoFile(self, outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile):
         #write node type file
         fd = open(outNodeTypeFile, 'a')
-        for tp, tpId in nodeTypeCls.commonTypeToIdMap:
+        for tp, tpId in nodeTypeCls.commonTypeToIdMap.items():
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
         
-        for tp, tpId in nodeTypeCls.mediaTypesToIdMap:
+        for tp, tpId in nodeTypeCls.mediaTypesToIdMap.items():
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
     
         fd.close()
@@ -185,6 +185,7 @@ class parserDblpXmlCls:
         df.to_csv(outNodeNameToIdFile, header = ["node Id"], sep='\t', index=True)
         
         #write into outEdgeListFile
+        os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
         df = pd.DataFrame(list(parserDblpXmlCls.edgeList))
         df.to_csv(outEdgeListFile, header = ["node Id source", "node Id dst", "edge hierarchical prop"], sep='\t', index=False)
         
@@ -198,8 +199,8 @@ def main():
     #os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
     #fd = open(outEdgeListFile, 'a')
     
-    context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
-    #context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
+    #context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
+    context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context)
     
     
