@@ -62,7 +62,10 @@ class parserDblpXmlCls:
                 if elem.text:
                     mediaType= unidecode(elem.tage).lower().strip()                 #specific conference, journal name
             
-            if mediaTypesToIdMap()
+            if mediaType in mediaTypesToIdMap:
+                mediaNameTag = mediaTypesToIdMap[mediaType]
+                if elem.tag == mediaNameTag:
+                    mediaTypeName = unidecode(elem.text).lower().strip() 
             if elem.tag in mediaTypeToNameLstMap:
                 print ("media TypeName: ", mediaTypeName, elem.tag)
                 if len(authors) is not 0 and title is not '':
