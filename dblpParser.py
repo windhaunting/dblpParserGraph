@@ -118,7 +118,8 @@ class parserDblpXmlCls:
                     mediaType = ""
                     del authors[:]
                 if len(year) is not 0 and title is not '':
-                    nodeTime = month + '/' + year + '--' + str(nodeType.timeType)
+                    month = monthToDigitMap[month] if month in monthToDigitMap else month
+                    nodeTime = month + '/' + year + '--' + str(nodeType.timeType) 
                     nodeTitle = title + "--"+ str(nodeType.paperType)
                     inList = [nodeTime, nodeTitle, 'same']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
