@@ -199,7 +199,7 @@ def main():
     #os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
     #fd = open(outEdgeListFile, 'a')
     
-    #context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
+    #context = etree.iterparse('../dblp12012016/dblp-Part-Test.xml', load_dtd=True, html=True)
     context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context)
     
