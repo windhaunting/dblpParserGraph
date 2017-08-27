@@ -29,10 +29,9 @@ class nodeType(object):
     peopleType = 1            #people type-- author
     paperType = 2             #paper title
     topicType = 3             #topic
-    #venueType = 4             #venue
     timeType = 4              #Time  month/year
-    affilType = 5             #author affiliation
-    mediaTypesToIdMap = {list(mediaTypeToNameLstMap.keys())[j-1]:j+5 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
+    #affilType = 5             #author affiliation
+    mediaTypesToIdMap = {list(mediaTypeToNameLstMap.keys())[j-1]:j+4 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
    
 
 class parserDblpXmlCls:
@@ -82,7 +81,7 @@ class parserDblpXmlCls:
                     year = unidecode(elem.text).lower().strip() 
             
             if elem.tag in mediaTypeToNameLstMap:
-                print ("media Name: ", mediaName, elem.tag)
+                #print ("media Name: ", mediaName, elem.tag)
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
@@ -131,7 +130,6 @@ class parserDblpXmlCls:
         
         del context
     
-        
     #print element in the file
     def printElementPair(self, elem, fout):
         print ("printing ... " + elem)
@@ -146,7 +144,8 @@ def main():
     os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
     fd = open(outEdgeListFile, 'a')
     
-    context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
+    #context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
+    context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context, fd)
     
     
