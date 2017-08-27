@@ -53,6 +53,9 @@ class parserDblpXmlCls:
         mediaType = ""
         mediaName = ""
         
+        year = ""
+        month = ""
+        
         #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
@@ -68,6 +71,13 @@ class parserDblpXmlCls:
                 mediaNameTag = mediaTypeToNameLstMap[mediaType]
                 if elem.tag == mediaNameTag:
                     mediaName = unidecode(elem.text).lower().strip() 
+            
+            if elem.tag == 'month':
+                month = unidecode(elem.tag).lower().strip() 
+            if elem.tag == "year":
+                year = unidecode(elem.tag).lower().strip() 
+            
+            
             if elem.tag in mediaTypeToNameLstMap:
                 print ("media Name: ", mediaName, elem.tag)
                 if len(authors) is not 0 and title is not '':
@@ -99,10 +109,14 @@ class parserDblpXmlCls:
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeM, 'lower']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
-                    
-                    title = ''
+                   
+                    #delete and reinitiate
                     mediaName = ""
+                    mediaType = ""
                     del authors[:]
+                if len()                      
+                    title = ''
+                  
             elem.clear()
         
         del context        
