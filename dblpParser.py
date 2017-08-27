@@ -85,9 +85,8 @@ class parserDblpXmlCls:
                         # author <--> paper
                         nodeA = a + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
                         nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
+                        
                         inList = [nodeA, nodeTitle, "same"]
-                        writeListRowToFileWriterTsv(fd, inList, '\t')
-                        inList = [nodeTitle, nodeA, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                          
                     #author <--> author 
@@ -98,16 +97,13 @@ class parserDblpXmlCls:
                                 nodeA2 = a2 + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
                                 inList = [nodeA1, nodeA2, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
-                                inList = [nodeA2, nodeA1, 'same']
-                                writeListRowToFileWriterTsv(fd, inList, '\t')
+
                     
                 #paper title <--> mediaTypeName
                 if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
                     nodeM = mediaName + "+"+ str(nodeTypeCls.mediaTypesToIdMap[mediaType])
                     nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                     inList = [nodeM, nodeTitle, 'higher']
-                    writeListRowToFileWriterTsv(fd, inList, '\t')
-                    inList = [nodeTitle, nodeM, 'lower']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                    
                     #delete and reinitiate
@@ -120,8 +116,7 @@ class parserDblpXmlCls:
                     nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                     inList = [nodeTime, nodeTitle, 'same']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
-                    inList = [nodeTitle, nodeTime, 'same']
-                    writeListRowToFileWriterTsv(fd, inList, '\t')
+
              
             elem.clear()
         

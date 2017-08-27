@@ -29,17 +29,16 @@ class parserDblpXmlCls:
         #write type and type Id 
     def writeTypeFile(self, outFile):
         fd = open(outFile, 'a')
-        for tp, tpId in nodeType.commonTypeToIdMap:
+        for tp, tpId in nodeTypeCls.commonTypeToIdMap:
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
         
-        for tp, tpId in nodeType.mediaTypesToIdMap:
+        for tp, tpId in nodeTypeCls.mediaTypesToIdMap:
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
     
         fd.close()
     
        #write node info ;  node name-type with nodeId
-    def writeNodeInfoEdgeListFile(self, outFileNodeInfo, outFileEdgeListId):
- 
+    def writeNodeInfoEdgeListFile(self, startNodeId, outFileNodeInfo, outFileEdgeListId):
         fd = open(outFileNodeInfo, 'a')
  
     
