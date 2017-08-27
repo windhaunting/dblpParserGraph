@@ -48,15 +48,15 @@ class parserDblpXmlCls:
     
     #Parser dblp xml file
     def readParserXMl(self, context, fd):
-        authors = blist()
-        title = ""
-        mediaType = ""
+        authors = blist()             
+        title = ""                    
+        mediaType = ""                
         mediaName = ""
         
         year = ""
         month = ""
         
-        #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
+        #parse the tags
         for event, elem in context:
             if elem.tag == 'author':
                 authors.append(unidecode(elem.text).lower().strip())
@@ -76,7 +76,6 @@ class parserDblpXmlCls:
                 month = unidecode(elem.tag).lower().strip() 
             if elem.tag == "year":
                 year = unidecode(elem.tag).lower().strip() 
-            
             
             if elem.tag in mediaTypeToNameLstMap:
                 print ("media Name: ", mediaName, elem.tag)
@@ -114,9 +113,14 @@ class parserDblpXmlCls:
                     mediaName = ""
                     mediaType = ""
                     del authors[:]
-                if len()                      
-                    title = ''
-                  
+                if len(year) != 0 and title != '':
+                    nodeTime = month + '/' + year + '--' + str(nodeType.timeType)
+                    nodeTitle = title + "--"+ str(nodeType.paperType)
+                    inList = [nodeTime, nodeTitle, 'same']
+                    writeListRowToFileWriterTsv(fd, inList, '\t')
+                    inList = [nodeTitle, nodeTime, 'same']
+                    writeListRowToFileWriterTsv(fd, inList, '\t')
+                   
             elem.clear()
         
         del context        
