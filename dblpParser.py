@@ -9,7 +9,6 @@ Created on Fri Aug 18 23:52:30 2017
 #function for parser dblp xml iterative.  
 #do not to read all xml content into memory
 import os
-import numpy as np
 import pandas as pd
 from blist import blist
 from lxml import etree
@@ -18,12 +17,14 @@ from unidecode import unidecode
 from commons import writeListRowToFileWriterTsv
 
 
-#mediaTypeLst = ['www', 'phdthesis', 'inproceedings', 'incollection', 'proceedings', 'book', 'mastersthesis', 'article']
 mediaTypeToNameLstMap = {'www': 'url', 'phdthesis': 'school',  'inproceedings': 'booktitle',
                    'incollection': 'booktitle', 'proceedings':'booktitle', 'book': 'publisher',
                    'mastersthesis': 'school', 'article': 'journal'}              #media type --> its content, conference, journal etc
-#node type for graph
 
+monthToDigitMap = {"january": "01", "february": "02", "march": "03", "april": "04", "may": "05", "june": "06",
+            "july": "07", "august": "08", "september": "09", "october": "10", "november": "11", "december": "12"}
+
+#node type for graph
 class nodeType(object):
     peopleType = 1            #people type-- author
     paperType = 2             #paper title
@@ -60,6 +61,7 @@ class parserDblpXmlCls:
         for event, elem in context:
             if elem.tag == 'author':
                 authors.append(unidecode(elem.text).lower().strip())
+                
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text).lower().strip() 
@@ -72,10 +74,12 @@ class parserDblpXmlCls:
                 if elem.tag == mediaNameTag:
                     mediaName = unidecode(elem.text).lower().strip() 
             
-            if elem.tag == 'month':
-                month = unidecode(elem.tag).lower().strip() 
+            if elem.tag == "month":
+                if elem.text:
+                    month = unidecode(elem.text).lower().strip() 
             if elem.tag == "year":
-                year = unidecode(elem.tag).lower().strip() 
+                if elem.text:
+                    year = unidecode(elem.text).lower().strip() 
             
             if elem.tag in mediaTypeToNameLstMap:
                 print ("media Name: ", mediaName, elem.tag)
@@ -113,20 +117,23 @@ class parserDblpXmlCls:
                     mediaName = ""
                     mediaType = ""
                     del authors[:]
-                if len(year) != 0 and title != '':
+                if len(year) is not 0 and title is not '':
                     nodeTime = month + '/' + year + '--' + str(nodeType.timeType)
                     nodeTitle = title + "--"+ str(nodeType.paperType)
                     inList = [nodeTime, nodeTitle, 'same']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeTime, 'same']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
-                   
+             
+            
             elem.clear()
         
-        del context        
-
-    def writeElementPair(self, elem, fout):
-        print ("writing ... " + elem)
+        del context
+    
+        
+    #print element in the file
+    def printElementPair(self, elem, fout):
+        print ("printing ... " + elem)
         print (fout, elem)
     
 
