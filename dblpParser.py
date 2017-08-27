@@ -86,9 +86,19 @@ class parserDblpXmlCls:
                         nodeA = a + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
                         nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                         
-                        inList = [nodeA, nodeTitle, "same"]
-                        writeListRowToFileWriterTsv(fd, inList, '\t')
-                         
+                        if nodeA not in parserDblpXmlCls.graphNodeNameToIdMap:
+                            parserDblpXmlCls.graphNodeNameToIdMap[nodeA] = parserDblpXmlCls.startNodeId
+                            parserDblpXmlCls.startNodeId += 1
+                        if nodeTitle not in parserDblpXmlCls.graphNodeNameToIdMap:
+                            parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle] = parserDblpXmlCls.startNodeId
+                            parserDblpXmlCls.startNodeId += 1
+                        
+                        edgeProp = 'same'             #lower hierarchical relation
+                        inList = 
+                        inList = [parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp]
+                        parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp])
+                        writeListRowToFileWriterTsv(fd, [parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeA], edgeProp], '\t')
+                    
                     #author <--> author 
                     for a1 in authors:
                         for a2 in authors:
