@@ -84,8 +84,8 @@ class parserDblpXmlCls:
                     for a1 in authors:
                         for a2 in authors:
                             if a1 != a2:
-                                nodeA1 = a1 + "("+ str(nodeType.peopleType) + ")"
-                                nodeA2 = a2 + "("+ str(nodeType.peopleType) + ")"
+                                nodeA1 = a1 + "--"+ str(nodeType.peopleType)
+                                nodeA2 = a2 + "--"+ str(nodeType.peopleType)
                                 inList = [nodeA1, nodeA2, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                                 inList = [nodeA2, nodeA1, 'same']
@@ -93,8 +93,8 @@ class parserDblpXmlCls:
                     
                 #paper title <--> mediaTypeName
                 if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
-                    nodeM = mediaName + "("+ str(nodeType.mediaTypesToIdMap[mediaType]) + ")"
-                    nodeTitle = title + "("+ str(nodeType.paperType) + ")"
+                    nodeM = mediaName + "--"+ str(nodeType.mediaTypesToIdMap[mediaType])
+                    nodeTitle = title + "--"+ str(nodeType.paperType)
                     inList = [nodeM, nodeTitle, 'higher']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeM, 'lower']
