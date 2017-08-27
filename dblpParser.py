@@ -85,8 +85,8 @@ class parserDblpXmlCls:
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
-                        nodeA = a + "("+ str(nodeType.peopleType) + ")"
-                        nodeTitle = title + "("+ str(nodeType.paperType) + ")"
+                        nodeA = a + "+"+ str(nodeType.peopleType)
+                        nodeTitle = title + "+"+ str(nodeType.paperType)
                         inList = [nodeA, nodeTitle, "same"]
                         writeListRowToFileWriterTsv(fd, inList, '\t')
                         inList = [nodeTitle, nodeA, "same"]
@@ -96,8 +96,8 @@ class parserDblpXmlCls:
                     for a1 in authors:
                         for a2 in authors:
                             if a1 != a2:
-                                nodeA1 = a1 + "--"+ str(nodeType.peopleType)
-                                nodeA2 = a2 + "--"+ str(nodeType.peopleType)
+                                nodeA1 = a1 + "+"+ str(nodeType.peopleType)
+                                nodeA2 = a2 + "+"+ str(nodeType.peopleType)
                                 inList = [nodeA1, nodeA2, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                                 inList = [nodeA2, nodeA1, 'same']
@@ -105,8 +105,8 @@ class parserDblpXmlCls:
                     
                 #paper title <--> mediaTypeName
                 if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
-                    nodeM = mediaName + "--"+ str(nodeType.mediaTypesToIdMap[mediaType])
-                    nodeTitle = title + "--"+ str(nodeType.paperType)
+                    nodeM = mediaName + "+"+ str(nodeType.mediaTypesToIdMap[mediaType])
+                    nodeTitle = title + "+"+ str(nodeType.paperType)
                     inList = [nodeM, nodeTitle, 'higher']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeM, 'lower']
@@ -118,8 +118,8 @@ class parserDblpXmlCls:
                     del authors[:]
                 if len(year) is not 0 and title is not '':
                     month = monthToDigitMap[month] if month in monthToDigitMap else month
-                    nodeTime = month + '/' + year + '--' + str(nodeType.timeType) 
-                    nodeTitle = title + "--"+ str(nodeType.paperType)
+                    nodeTime = month + '/' + year + '+' + str(nodeType.timeType) 
+                    nodeTitle = title + "+"+ str(nodeType.paperType)
                     inList = [nodeTime, nodeTitle, 'same']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     inList = [nodeTitle, nodeTime, 'same']
@@ -135,7 +135,18 @@ class parserDblpXmlCls:
         print ("printing ... " + elem)
         print (fout, elem)
     
-
+    #write node info ;  node name-type with nodeId
+    def writeNodeInfoFile(self):
+        x = 1
+    
+    #write type and type Id 
+    def writeTypeFile(self):
+        x = 1
+    
+    #write edge list fiel with node Id;  source \t dst node Id  \t edge property
+    def writeEdgeListFileId(self):
+        x = 1
+    
 def main():
     
     parseDblpXmlObj = parserDblpXmlCls()
@@ -145,7 +156,7 @@ def main():
     fd = open(outEdgeListFile, 'a')
     
     #context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
-    context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
+    context = etree.iterparse('../dblp12012016/dblpPart.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context, fd)
     
     
