@@ -31,7 +31,7 @@ class nodeType(object):
     #venueType = 4             #venue
     timeType = 4              #Time  month/year
     affilType = 5             #author affiliation
-    mediaTypesToIdMap = {mediaTypeToNameLstMap[j-1]:j+5 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
+    mediaTypesToIdMap = {list(mediaTypeToNameLstMap.keys())[j-1]:j+5 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
    
 
 class parserDblpXmlCls:
@@ -50,7 +50,9 @@ class parserDblpXmlCls:
     def readParserXMl(self, context, fd):
         authors = blist()
         title = ""
-        mediaTypeName = ""
+        mediaType = ""
+        mediaName = ""
+        
         #mediaTypeTags =  [u'booktitle', u'journal', u'publisher', ]
         for event, elem in context:
             if elem.tag == 'author':
@@ -58,16 +60,16 @@ class parserDblpXmlCls:
             if elem.tag == 'title':
                 if elem.text:
     	               title = unidecode(elem.text).lower().strip() 
-            if elem.tag in mediaTypeLstMap:
-                if elem.text:
-                    mediaType= unidecode(elem.tage).lower().strip()                 #specific conference, journal name
-            
-            if mediaType in mediaTypesToIdMap:
-                mediaNameTag = mediaTypesToIdMap[mediaType]
-                if elem.tag == mediaNameTag:
-                    mediaTypeName = unidecode(elem.text).lower().strip() 
             if elem.tag in mediaTypeToNameLstMap:
-                print ("media TypeName: ", mediaTypeName, elem.tag)
+                if elem.text:
+                    mediaType= unidecode(elem.tag).lower().strip()                 #specific conference, journal name
+            
+            if mediaType in mediaTypeToNameLstMap:
+                mediaNameTag = mediaTypeToNameLstMap[mediaType]
+                if elem.tag == mediaNameTag:
+                    mediaName = unidecode(elem.text).lower().strip() 
+            if elem.tag in mediaTypeToNameLstMap:
+                print ("media Name: ", mediaName, elem.tag)
                 if len(authors) is not 0 and title is not '':
                     for a in authors:
                         # author <--> paper
@@ -89,9 +91,9 @@ class parserDblpXmlCls:
                                 inList = [nodeA2, nodeA1, 'same']
                                 writeListRowToFileWriterTsv(fd, inList, '\t')
                     
-                #paper title --> mediaTypeName
-                if len(mediaTypeName) is not 0 and title is not '':
-                    nodeM = mediaTypeName + "("+ str(nodeType.mediaTypesToIdMap[mediaTypeName]) + ")"
+                #paper title <--> mediaTypeName
+                if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
+                    nodeM = mediaName + "("+ str(nodeType.mediaTypesToIdMap[mediaType]) + ")"
                     nodeTitle = title + "("+ str(nodeType.paperType) + ")"
                     inList = [nodeM, nodeTitle, 'higher']
                     writeListRowToFileWriterTsv(fd, inList, '\t')
@@ -99,7 +101,7 @@ class parserDblpXmlCls:
                     writeListRowToFileWriterTsv(fd, inList, '\t')
                     
                     title = ''
-                    mediaTypeName = ""
+                    mediaName = ""
                     del authors[:]
             elem.clear()
         
