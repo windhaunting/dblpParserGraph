@@ -45,7 +45,7 @@ class parserDblpXmlCls:
     
     
     #Parser dblp xml file
-    def readParserXMl(self, context, fd):
+    def readParserXMl(self, context):
         authors = blist()             
         title = ""                    
         mediaType = ""                
@@ -80,7 +80,9 @@ class parserDblpXmlCls:
             
             if elem.tag in mediaTypeToNameLstMap:
                 #print ("media Name: ", mediaName, elem.tag)
+                
                 if len(authors) is not 0 and title is not '':
+                    #get relations of author <--> paper
                     for a in authors:
                         # author <--> paper
                         nodeA = a + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
@@ -93,66 +95,119 @@ class parserDblpXmlCls:
                             parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle] = parserDblpXmlCls.startNodeId
                             parserDblpXmlCls.startNodeId += 1
                         
-                        edgeProp = 'same'             #lower hierarchical relation
-                        inList = 
-                        inList = [parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp]
+                        edgeProp = 'same'             #same level of hierarchical relation
                         parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp])
-                        writeListRowToFileWriterTsv(fd, [parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeA], edgeProp], '\t')
+                        parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeA], edgeProp])
                     
-                    #author <--> author 
+                    #get cooperation relations of author <--> author 
                     for a1 in authors:
                         for a2 in authors:
                             if a1 != a2:
                                 nodeA1 = a1 + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
                                 nodeA2 = a2 + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
-                                inList = [nodeA1, nodeA2, 'same']
-                                writeListRowToFileWriterTsv(fd, inList, '\t')
-
+                                                       
+                                if nodeA1 not in parserDblpXmlCls.graphNodeNameToIdMap:
+                                    parserDblpXmlCls.graphNodeNameToIdMap[nodeA1] = parserDblpXmlCls.startNodeId
+                                    parserDblpXmlCls.startNodeId += 1
+                                if nodeA2 not in parserDblpXmlCls.graphNodeNameToIdMap:
+                                    parserDblpXmlCls.graphNodeNameToIdMap[nodeA2] = parserDblpXmlCls.startNodeId
+                                    parserDblpXmlCls.startNodeId += 1
+                        
+                                edgeProp = 'same'             #lower hierarchical relation
+                                parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeA1], parserDblpXmlCls.graphNodeNameToIdMap[nodeA2], edgeProp])
+                                parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeA2], parserDblpXmlCls.graphNodeNameToIdMap[nodeA1], edgeProp])
                     
-                #paper title <--> mediaTypeName
+
+                #get relations of paper title <--> mediaTypeName
                 if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
                     nodeM = mediaName + "+"+ str(nodeTypeCls.mediaTypesToIdMap[mediaType])
                     nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
-                    inList = [nodeM, nodeTitle, 'higher']
-                    writeListRowToFileWriterTsv(fd, inList, '\t')
+                    if nodeM not in parserDblpXmlCls.graphNodeNameToIdMap:
+                        parserDblpXmlCls.graphNodeNameToIdMap[nodeM] = parserDblpXmlCls.startNodeId
+                        parserDblpXmlCls.startNodeId += 1
+                    if nodeTitle not in parserDblpXmlCls.graphNodeNameToIdMap:
+                        parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle] = parserDblpXmlCls.startNodeId
+                        parserDblpXmlCls.startNodeId += 1
+                        
+                    edgeProp = 'lower'             #lower level of hierarchical relation
+                    parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeM], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp])
+                    edgeProp = 'higher'             #higher hierarchical relation
+                    parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeM], edgeProp])
+                    
                    
                     #delete and reinitiate
                     mediaName = ""
                     mediaType = ""
                     del authors[:]
+                #get relations of node time <--> paper title
                 if len(year) is not 0 and title is not '':
-                    month = monthToDigitMap[month] if month in monthToDigitMap else month
+                    month = monthToDigitMap[month] if month in monthToDigitMap else month            #if month value is missing
                     nodeTime = month + '/' + year + '+' + str(nodeTypeCls.commonTypeToIdMap["time"]) 
                     nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
-                    inList = [nodeTime, nodeTitle, 'same']
-                    writeListRowToFileWriterTsv(fd, inList, '\t')
-
-             
+                    if nodeTime not in parserDblpXmlCls.graphNodeNameToIdMap:
+                        parserDblpXmlCls.graphNodeNameToIdMap[nodeTime] = parserDblpXmlCls.startNodeId
+                        parserDblpXmlCls.startNodeId += 1
+                    if nodeTitle not in parserDblpXmlCls.graphNodeNameToIdMap:
+                        parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle] = parserDblpXmlCls.startNodeId
+                        parserDblpXmlCls.startNodeId += 1
+                        
+                    edgeProp = 'same'             #same level of hierarchical relation
+                    #inList = [parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp]
+                    parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTime], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp])
+                    parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeTime], edgeProp])
+                    
             elem.clear()
         
         del context
     
-    #print element in the file
+    
+    
+    #print element in the console
     def printElementPair(self, elem, fout):
         print ("printing ... " + elem)
         print (fout, elem)
     
- 
+    #write graphNodeNameToIdMap, graNodeTypeMap, and edgeList
+    def writeIntoFile(self, outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile):
+        #write node type file
+        fd = open(outNodeTypeFile, 'a')
+        for tp, tpId in nodeTypeCls.commonTypeToIdMap:
+            writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
+        
+        for tp, tpId in nodeTypeCls.mediaTypesToIdMap:
+            writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
+    
+        fd.close()
+        
+        #write into outNodeNameToIdFile
+        os.remove(outNodeNameToIdFile) if os.path.exists(outNodeNameToIdFile) else None
+        df = pd.DataFrame.from_dict(parserDblpXmlCls.graphNodeNameToIdMap, orient='index')
+        df.to_csv(outNodeNameToIdFile, header = ["node Id"], sep='\t', index=True)
+        
+        #write into outEdgeListFile
+        df = pd.DataFrame(list(parserDblpXmlCls.edgeList))
+        df.to_csv(outEdgeListFile, header = ["node Id source", "node Id dst", "edge hierarchical prop"], sep='\t', index=False)
+        
 
     
 def main():
     
     parseDblpXmlObj = parserDblpXmlCls()
     
+    #outEdgeListFile = "output/outEdgeListFile.tsv"
+    #os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
+    #fd = open(outEdgeListFile, 'a')
+    
+    context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
+    #context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
+    parseDblpXmlObj.readParserXMl(context)
+    
+    
+    outNodeTypeFile = "output/outNodeTypeFile.tsv"
+    outNodeNameToIdFile = "output/outNodeNameToIdFile.tsv"
     outEdgeListFile = "output/outEdgeListFile.tsv"
-    os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
-    fd = open(outEdgeListFile, 'a')
     
-    #context = etree.iterparse('../dblp/dblp-Part-Test.xml', load_dtd=True, html=True)
-    context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
-    parseDblpXmlObj.readParserXMl(context, fd)
-    
-    fd.close()
+    parseDblpXmlObj.writeIntoFile(outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile)
     
     
 if __name__== "__main__":

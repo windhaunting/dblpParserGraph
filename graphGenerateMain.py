@@ -56,6 +56,8 @@ def main():
     context = etree.iterparse('../dblp12012016/dblpPart.xml', load_dtd=True, html=True)
     parseDblpXmlObj.readParserXMl(context, fd)
     
+    
+    
     fd.close()
     
     
