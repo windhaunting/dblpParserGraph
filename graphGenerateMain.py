@@ -6,6 +6,13 @@ Created on Sun Aug 27 00:33:41 2017
 @author: fubao
 """
 
+import os
+import pandas as pd
+from blist import blist
+
+from commons import writeListRowToFileWriterTsv
+from dblpParser import nodeTypeCls
+
 
 class parserDblpXmlCls:
     startNodeId = 1                      #graph node Id starting from 1
@@ -33,7 +40,7 @@ class parserDblpXmlCls:
        #write node info ;  node name-type with nodeId
     def writeNodeInfoEdgeListFile(self, outFileNodeInfo, outFileEdgeListId):
  
-        fd = open(outFile, 'a')
+        fd = open(outFileNodeInfo, 'a')
  
     
         fd.close()
