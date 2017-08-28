@@ -82,8 +82,8 @@ class graphCombNodesCls(object):
 
         #modify the 
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
-        
-
+           
+            
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
 
         #get 
@@ -97,8 +97,10 @@ class graphCombNodesCls(object):
         if len(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values) != 0:
             return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         else:
-            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x))
-            return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[str(x)]]["node_id"].values[0]) 
+            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x), x)
+            if "vldb+++5" in conferNameToOldMap:
+                print ("aYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap["vldb+++5"]) 
+            return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values[0]) 
         
     #given node type in the outer conf, we get the new nodeName without previous
     def getConferenNameTopicFromType(self, ingetTypeStr, oldGraphNodeNameSet, confNameSet):
@@ -115,15 +117,20 @@ class graphCombNodesCls(object):
         conferNameToOldMap = {}                #conference type extracted name map to dblp conference name
         for nodeNameType in confNameSet:
             nodeName = nodeNameType.split('+++')[0].lower().strip()
-            #nodeTypeId = nodeNameType.split('+++')[1]
+            nodeTypeId = nodeNameType.split('+++')[1]
             for nodeNameTypeOld in oldtypeNodeIdSet:
-                if nodeName in nodeNameTypeOld:                 #get common nodes for joining               
+                if nodeName in nodeNameTypeOld and nodeTypeId == nodeNameTypeOld.split('+++')[1]:                 #get common nodes for joining               
                     #modify nodeName 
                     #nodeNameType = nodeNameTypeOld
                     newconfNameSet.add(nodeNameType)
                     conferNameToOldMap[nodeNameType] = nodeNameTypeOld
                     break
         diffconfNameSet = confNameSet - newconfNameSet
+        
+        if "database+++3" in confNameSet:
+            print ("Yessssssssssssssssssssssssssss")
+        if "vldb+++5" in conferNameToOldMap:
+            print ("aYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap["vldb+++5"])    
         return diffconfNameSet, conferNameToOldMap     #delete duplicates nodenametype
     
     
