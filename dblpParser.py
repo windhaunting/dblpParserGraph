@@ -63,7 +63,7 @@ class parserDblpXmlCls:
                 if elem.text:
     	               title = unidecode(elem.text).lower().strip() 
             if elem.tag in mediaTypeToNameLstMap:
-                if elem.text:
+                if elem.tag:
                     mediaType= unidecode(elem.tag).lower().strip()                 #specific conference, journal name
             
             if mediaType in mediaTypeToNameLstMap:
@@ -155,7 +155,9 @@ class parserDblpXmlCls:
                     #inList = [parserDblpXmlCls.graphNodeNameToIdMap[nodeA], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp]
                     parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTime], parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], edgeProp])
                     parserDblpXmlCls.edgeList.append([parserDblpXmlCls.graphNodeNameToIdMap[nodeTitle], parserDblpXmlCls.graphNodeNameToIdMap[nodeTime], edgeProp])
-                    
+                    year = ""
+                    month = ""
+                    title = ""
             elem.clear()
         
         del context
@@ -171,6 +173,7 @@ class parserDblpXmlCls:
     def writeIntoFile(self, outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile):
         #write node type file
         #os.remove(outNodeTypeFile) if os.path.exists(outNodeTypeFile) else None
+        print ("nodeTypeCls.mediaTypesToIdMapxxxxx: ", nodeTypeCls.commonTypeToIdMap, nodeTypeCls.mediaTypesToIdMap)
         fd = open(outNodeTypeFile, 'w')
         for tp, tpId in nodeTypeCls.commonTypeToIdMap.items():
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
@@ -200,9 +203,9 @@ def main():
     #os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
     #fd = open(outEdgeListFile, 'a')
     
-    #context = etree.iterparse('../../dblp12012016/dblpPart3.xml', load_dtd=True, html=True)
+    context = etree.iterparse('../../dblp12012016/dblpPart2.xml', load_dtd=True, html=True)
     #context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
-    #parseDblpXmlObj.readParserXMl(context)
+    parseDblpXmlObj.readParserXMl(context)
     
     
     outNodeTypeFile = "../output/outNodeTypeFile.tsv"
