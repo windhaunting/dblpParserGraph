@@ -56,7 +56,7 @@ class graphCombNodesCls(object):
         #get from oldNodeNameToIdFile file
         oldGraphNodeNameSet = dfOldNodeNameId.ix[:,0]
         print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
-        diffconfNameSet = self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
+        diffconfNameSet, conferNameToOldMap = self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
         #read conf topic node name  into df
         dfConf = pd.DataFrame(list(diffconfNameSet), index=None, columns= ["node_name"])
         
@@ -75,8 +75,11 @@ class graphCombNodesCls(object):
         
         #write conf topic edge list into df
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
-        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
-        dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        #dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        #dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        
+        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
+
         #modify the 
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
         
@@ -89,6 +92,13 @@ class graphCombNodesCls(object):
         print ("dfConfEdge: ", dfConfEdge)
        # dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
         '''
+    
+    def format(self, x, dfGraphNodeNameIdFinal, conferNameToOldMap):
+        if len(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values) != 0:
+            return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        else:
+            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x))
+            return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[str(x)]]["node_id"].values[0]) 
         
     #given node type in the outer conf, we get the new nodeName without previous
     def getConferenNameTopicFromType(self, ingetTypeStr, oldGraphNodeNameSet, confNameSet):
@@ -102,6 +112,7 @@ class graphCombNodesCls(object):
         
         newconfNameSet = set()
         
+        conferNameToOldMap = {}                #conference type extracted name map to dblp conference name
         for nodeNameType in confNameSet:
             nodeName = nodeNameType.split('+++')[0].lower().strip()
             #nodeTypeId = nodeNameType.split('+++')[1]
@@ -110,9 +121,10 @@ class graphCombNodesCls(object):
                     #modify nodeName 
                     #nodeNameType = nodeNameTypeOld
                     newconfNameSet.add(nodeNameType)
+                    conferNameToOldMap[nodeNameType] = nodeNameTypeOld
                     break
-        
-        return confNameSet - newconfNameSet     #delete duplicates nodenametype
+        diffconfNameSet = confNameSet - newconfNameSet
+        return diffconfNameSet, conferNameToOldMap     #delete duplicates nodenametype
     
     
 def main():

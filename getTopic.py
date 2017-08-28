@@ -33,6 +33,9 @@ class confTopicClass(object):
         
         print ("len readEachTopicFile: ", len(confTopicClass.conferenceNameToTopicEdgeLst))
         print ("nodeTypeCls.mediaTypesToIdMap: ", nodeTypeCls.commonTypeToIdMap, nodeTypeCls.mediaTypesToIdMap)
+        
+        if "database+++3" in confTopicClass.confNameSet:
+            print ("Yessssssssssssssssssssssssssss")
     #read every stored topic file
     def readEachConfTopicFile(self, fileIn):
         df = pd.read_csv(fileIn, delimiter = '\t')
