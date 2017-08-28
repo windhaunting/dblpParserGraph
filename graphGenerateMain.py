@@ -17,6 +17,8 @@ from shutil import copyfile
 
 
 #combine the dblp graph node (from file) and the conference topic nodefrom list/set 
+#Moreover, it gets the confe name in the outer extracted set from getTopic.py and change file name
+
 class graphCombNodesCls(object):
     startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}           #store node name+type -> ID map
@@ -61,7 +63,12 @@ class graphCombNodesCls(object):
         print ("dfConfEdge: ", dfConfEdge)
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
         
-
+    #given node type to get the nodeName and node Id
+    def getConferenNameFromType(ingetTypeStr = 'article', confNameSet):
+        #get nodeType Id
+        nodeId = nodeTypeCls.mediaTypesToIdMap[ingetTypeStr]
+        
+        
 def main():
     
     graphCombNodesObj = graphCombNodesCls()

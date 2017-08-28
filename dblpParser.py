@@ -28,7 +28,7 @@ monthToDigitMap = {"january": "01", "february": "02", "march": "03", "april": "0
 class nodeTypeCls(object):
    
     commonTypeToIdMap = {"people": 1, "paper": 2, "topic": 3, "time": 4}      # affilType = 5  #author affiliation
-    mediaTypesToIdMap = {list(mediaTypeToNameLstMap.keys())[j-1]:j+4 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
+    mediaTypesToIdMap = {sorted(list(mediaTypeToNameLstMap.keys()))[j-1]:j+4 for j in range(1, len(mediaTypeToNameLstMap)+1)}   # mediatype to id
    
 
 class parserDblpXmlCls:
@@ -162,8 +162,7 @@ class parserDblpXmlCls:
         
         del context
     
-    
-    
+        
     #print element in the console
     def printElementPair(self, elem, fout):
         print ("printing ... " + elem)
