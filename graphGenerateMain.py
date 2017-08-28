@@ -46,18 +46,21 @@ class graphCombNodesCls(object):
         #get conference topic nodeName
         confTopicObj = confTopicClass()
         confTopicObj.executeMainFunction()        
-        #read 
+        #read conf topic node name  into df
         dfConf = pd.DataFrame(list(confTopicClass.confNameSet), index=None, columns=None)
         
         #seNodeIds = pd.Series([]) #seNodeIds.values
+        #get node Id for topic
         dfConf["nodeId"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
-        print ("df: ", dfConf)
-
-        #for row in df.itertuples():
-        #    nodeName = row[0]
-        #    nodeId = row[1]
-        #    graphNodeNameToIdMap
-
+        print ("dfConf: ", dfConf.shape)
+        dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header=False, index=False)
+        
+        #read conf topic edge list into df
+        dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
+        
+        print ("dfConfEdge: ", dfConfEdge)
+        #dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
+        
 
 def main():
     

@@ -45,8 +45,8 @@ class confTopicClass(object):
         for val in df.values:
             #print ("val: ", val)
             edgeProp = "same"
-            confTopicClass.conferenceNameToTopicEdgeLst.append([abbreName, val, edgeProp])
-            confTopicClass.conferenceNameToTopicEdgeLst.append([val, abbreName, edgeProp])
+            confTopicClass.conferenceNameToTopicEdgeLst.append([abbreName, val[0].lower().strip(), edgeProp])
+            confTopicClass.conferenceNameToTopicEdgeLst.append([val[0].lower().strip(), abbreName, edgeProp])
         
             nodeTopic = val[0].lower().strip() + "+" + str(nodeTypeCls.commonTypeToIdMap["topic"])
             if nodeTopic not in confTopicClass.confNameSet:
