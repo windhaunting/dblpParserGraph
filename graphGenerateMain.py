@@ -63,12 +63,28 @@ class graphCombNodesCls(object):
         print ("dfConfEdge: ", dfConfEdge)
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
         
-    #given node type to get the nodeName and node Id
-    def getConferenNameFromType(ingetTypeStr = 'article', confNameSet):
+    #given node type in the outer conf, we get the nodeName and node Id
+    def getConferenNameFromType(ingetTypeStr = 'article', oldGraphNodeNameSet, confNameSet):
         #get nodeType Id
-        nodeId = nodeTypeCls.mediaTypesToIdMap[ingetTypeStr]
+        nodeTypeId = nodeTypeCls.mediaTypesToIdMap[ingetTypeStr]
+        oldtypeNodeIdSet = set()
+        for nodeNameType in oldGraphNodeNameSet:
+            nodeTpId = int(nodeNameType.split('+')[1].strip())      #node type Id
+            if nodeType == nodeTpId:
+                oldtypeNodeIdSet.add(nodeNameType.lower())
         
+        newconfNameSet = set()
         
+        for nodeNameType in confNameSet:
+            nodeName = nodeNameType.split('+')[0].lower().strip()
+            nodeTypeId = nodeNameType.split('+')[1]
+            for nodeNameTypeOld in oldtypeNodeIdSet:
+                if nodeName in nodeNameOld:
+                    #modify nodeName 
+                    nodeNameType = nodeNameTypeOld
+                    newconfNameSet.add(nodeNameType)
+        return newconfNameSet
+    
 def main():
     
     graphCombNodesObj = graphCombNodesCls()
