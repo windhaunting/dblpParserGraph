@@ -30,17 +30,18 @@ class confTopicClass(object):
             #print ("filePath: ", filePath)
             self.readEachTopicFile(filePath)
         
+        print ("len readEachTopicFile: ", len(confTopicClass.conferenceWebsites))
     def readEachTopicFile(self, fileIn):
         df = pd.read_csv(fileIn, delimiter = '\t')
         print (df.columns[0])
        #print (df.values)
-        
+        abbreName = df.columns[0].split('-')[0].lower().strip()
         for val in df.values:
-            x = 1
-
-    #write type and type Id 
-    def writeTypeFile(self, outFile):
-        x = 1
+            if abbreName not in confTopicClass.conferenceWebsites:
+                confTopicClass.conferenceWebsites[abbreName] = val
+        
+        
+    
     
 
 def main():

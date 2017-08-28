@@ -204,9 +204,9 @@ def main():
     parseDblpXmlObj.readParserXMl(context)
     
     
-    outNodeTypeFile = "output/outNodeTypeFile.tsv"
-    outNodeNameToIdFile = "output/outNodeNameToIdFile.tsv"
-    outEdgeListFile = "output/outEdgeListFile.tsv"
+    outNodeTypeFile = "../output/outNodeTypeFile.tsv"
+    outNodeNameToIdFile = "../output/outNodeNameToIdFile.tsv"
+    outEdgeListFile = "../output/outEdgeListFile.tsv"
     
     parseDblpXmlObj.writeIntoFile(outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile)
     
