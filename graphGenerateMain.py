@@ -37,7 +37,6 @@ class graphCombNodesCls(object):
         
         graphNodeMaxNodeIdCurrent = len(dfOldNodeNameId)         #node number
         print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent)
-                
         #remove file first
         os.remove(newOutNodeNameToIdFile) if os.path.exists(newOutNodeNameToIdFile) else None
 
@@ -65,8 +64,14 @@ class graphCombNodesCls(object):
         print ("dfConf: ", dfConf.shape)
         dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header=False, index=False)
         
+        
+        #read old edge list into df
+        dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
+        
+        print ("len(oldEdgeListFile): ", len(oldEdgeListFile))
+        
         '''
-        #read conf topic edge list into df
+        #write conf topic edge list into df
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
         
         print ("dfConfEdge: ", dfConfEdge)
