@@ -9,23 +9,35 @@ Created on Sun Aug 27 11:53:12 2017
 #get main conference and their topic;
 #first focus on the data management conference here 
 
-import glob
+from os import listdir
+from os.path import isfile, join
+import pandas as pd
 
-
-class getTopicCls:
+class confTopicClass(object):
    
-    #abbreviation name --> to website
-    conferenceWebsites = 
+    #abbreviation name --> to topic edge list
+    conferenceWebsites = {}
     
     
     def __init__(self):
       pass
     
     #read conference topic from file
-    def readConfTopics(fileDir):
-        filePaths = glob.glob(fileDir)
-        print (filePaths)
+    def readConfTopics(self, fileDir):
+        dirs = listdir(fileDir)
+        for file in dirs:
+            filePath = join(fileDir, file)
+            #print ("filePath: ", filePath)
+            self.readEachTopicFile(filePath)
         
+    def readEachTopicFile(self, fileIn):
+        df = pd.read_csv(fileIn, delimiter = '\t')
+        print (df.columns[0])
+       #print (df.values)
+        
+        for val in df.values:
+            x = 1
+
     #write type and type Id 
     def writeTypeFile(self, outFile):
         x = 1
@@ -33,14 +45,13 @@ class getTopicCls:
 
 def main():
     
-    getTopicClsObj = getTopicCls()
+    confTopicObj = confTopicClass()
     
     filePaths = "/home/fubao/workDir/ResearchProjects/GraphQuerySearchRelatedPractice/Data/dblpParserGraph/input/conferenceTopicFile/"
-    getTopicClsObj.readConfTopics()
+    confTopicObj.readConfTopics(filePaths)
     
     
-    
-    fd.close()
+
     
     
 if __name__== "__main__":
