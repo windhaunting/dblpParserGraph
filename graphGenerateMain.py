@@ -33,9 +33,11 @@ class graphCombNodesCls(object):
     
         #write type and type Id 
     def readEdgeListFile(self, oldNodeNameToIdFile, oldEdgeListFile, newOutNodeNameToIdFile, newOutEdgeListFile):
-        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t')        
+        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t') 
+        dfOldNodeNameId.rename(columns={'Unnamed: 0':'node_name'}, inplace=True)
+
         graphNodeMaxNodeIdCurrent = len(dfOldNodeNameId)         #node number
-        print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent)
+        print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent, dfOldNodeNameId.shape, dfOldNodeNameId.columns)
         #remove  newOutNodeNameToIdFile file first
         os.remove(newOutNodeNameToIdFile) if os.path.exists(newOutNodeNameToIdFile) else None
 
@@ -62,15 +64,19 @@ class graphCombNodesCls(object):
         print ("dfConf: ", dfConf.shape)
         dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header= None, index=False)
         
+        
+        #final nodeNameId df
+        dfGraphNodeNameIdFinal = pd.concat([dfOldNodeNameId, dfConf])
+        #print ("dfGraphNodeNameIdFinal : ", dfGraphNodeNameIdFinal["node_id"])
         #read old edge list into df
         #dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
         
         #write conf topic edge list into df
-        dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
-        dfConfEdge.ix[:,0].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"])
+        dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
+        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"])
         
         #modify the 
-        print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge.ix[:,0])
+        print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id", "node_dst_id"])
         
         #remove newOutEdgeListFile file first
         os.remove(newOutEdgeListFile) if os.path.exists(newOutEdgeListFile) else None
