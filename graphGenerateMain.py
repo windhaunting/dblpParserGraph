@@ -59,7 +59,7 @@ class graphCombNodesCls(object):
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
         
         print ("dfConfEdge: ", dfConfEdge)
-        #dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
+        dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
         
 
 def main():

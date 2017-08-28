@@ -32,11 +32,11 @@ class confTopicClass(object):
             self.readEachConfTopicFile(filePath)
         
         print ("len readEachTopicFile: ", len(confTopicClass.conferenceNameToTopicEdgeLst))
-        
+        print ("nodeTypeCls.mediaTypesToIdMap: ", nodeTypeCls.commonTypeToIdMap, nodeTypeCls.mediaTypesToIdMap)
     #read every stored topic file
     def readEachConfTopicFile(self, fileIn):
         df = pd.read_csv(fileIn, delimiter = '\t')
-        print (df.columns[0])
+        #print (df.columns[0])
        #print (df.values)
         abbreName = df.columns[0].split('-')[0].lower().strip()
         nodeAbbreName = abbreName + "+" + str(nodeTypeCls.mediaTypesToIdMap["article"])    #conference but in the journal tag
@@ -44,11 +44,11 @@ class confTopicClass(object):
             confTopicClass.confNameSet.add(nodeAbbreName)
         for val in df.values:
             #print ("val: ", val)
-            edgeProp = "same"
-            confTopicClass.conferenceNameToTopicEdgeLst.append([abbreName, val[0].lower().strip(), edgeProp])
-            confTopicClass.conferenceNameToTopicEdgeLst.append([val[0].lower().strip(), abbreName, edgeProp])
-        
             nodeTopic = val[0].lower().strip() + "+" + str(nodeTypeCls.commonTypeToIdMap["topic"])
+            edgeProp = "same"
+            confTopicClass.conferenceNameToTopicEdgeLst.append([nodeAbbreName, nodeTopic, edgeProp])
+            confTopicClass.conferenceNameToTopicEdgeLst.append([nodeTopic, nodeAbbreName, edgeProp])
+        
             if nodeTopic not in confTopicClass.confNameSet:
                 confTopicClass.confNameSet.add(nodeTopic)
         

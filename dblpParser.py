@@ -170,7 +170,8 @@ class parserDblpXmlCls:
     #write graphNodeNameToIdMap, graNodeTypeMap, and edgeList
     def writeIntoFile(self, outNodeTypeFile, outNodeNameToIdFile, outEdgeListFile):
         #write node type file
-        fd = open(outNodeTypeFile, 'a')
+        #os.remove(outNodeTypeFile) if os.path.exists(outNodeTypeFile) else None
+        fd = open(outNodeTypeFile, 'w')
         for tp, tpId in nodeTypeCls.commonTypeToIdMap.items():
             writeListRowToFileWriterTsv(fd, [tp, tpId], '\t')
         
@@ -199,9 +200,9 @@ def main():
     #os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
     #fd = open(outEdgeListFile, 'a')
     
-    context = etree.iterparse('../../dblp12012016/dblpPart2.xml', load_dtd=True, html=True)
+    #context = etree.iterparse('../../dblp12012016/dblpPart3.xml', load_dtd=True, html=True)
     #context = etree.iterparse('../dblp12012016/dblp-2016-12-01.xml', load_dtd=True, html=True)
-    parseDblpXmlObj.readParserXMl(context)
+    #parseDblpXmlObj.readParserXMl(context)
     
     
     outNodeTypeFile = "../output/outNodeTypeFile.tsv"
