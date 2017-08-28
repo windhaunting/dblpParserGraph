@@ -16,7 +16,7 @@ from getTopic import confTopicClass
 from shutil import copyfile
 
 
-#join and combine the dblp graph node (from file) and the conference topic nodefrom list/set 
+#combine the dblp graph node (from file) and the conference topic nodefrom list/set 
 class graphCombNodesCls(object):
     startNodeId = 1                      #graph node Id starting from 1
     graphNodeNameToIdMap  = {}           #store node name+type -> ID map
@@ -44,7 +44,15 @@ class graphCombNodesCls(object):
         copyfile(oldEdgeListFile, newOutEdgeListFile)
 
         #get conference topic nodeName
-        confTopicClass.executeMainFunction()
+        confTopicObj = confTopicClass()
+        confTopicObj.executeMainFunction()        
+        #read 
+        dfConf = pd.DataFrame(list(confTopicClass.confNameSet), index=None, columns=None)
+        
+        #seNodeIds = pd.Series([]) #seNodeIds.values
+        dfConf["nodeId"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
+        print ("df: ", dfConf)
+
         #for row in df.itertuples():
         #    nodeName = row[0]
         #    nodeId = row[1]
