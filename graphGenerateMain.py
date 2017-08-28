@@ -40,10 +40,12 @@ class graphCombNodesCls(object):
         print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent, dfOldNodeNameId.shape, dfOldNodeNameId.columns)
         #remove  newOutNodeNameToIdFile file first
         os.remove(newOutNodeNameToIdFile) if os.path.exists(newOutNodeNameToIdFile) else None
+        #remove newOutEdgeListFile file first
+        os.remove(newOutEdgeListFile) if os.path.exists(newOutEdgeListFile) else None
 
         #cp old into file into file first
         copyfile(oldNodeNameToIdFile, newOutNodeNameToIdFile)
-        copyfile(oldEdgeListFile, newOutEdgeListFile)
+        #copyfile(oldEdgeListFile, newOutEdgeListFile)
 
         #get conference topic nodeName
         confTopicObj = confTopicClass()
@@ -73,13 +75,13 @@ class graphCombNodesCls(object):
         
         #write conf topic edge list into df
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
-        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"])
-        
+        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         #modify the 
-        print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id", "node_dst_id"])
+        #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
         
-        #remove newOutEdgeListFile file first
-        os.remove(newOutEdgeListFile) if os.path.exists(newOutEdgeListFile) else None
+
+        dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
 
         #get 
         '''
