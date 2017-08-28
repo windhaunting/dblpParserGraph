@@ -54,17 +54,18 @@ class graphCombNodesCls(object):
         #get from oldNodeNameToIdFile file
         oldGraphNodeNameSet = dfOldNodeNameId.ix[:,0]
         print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
-        self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
+        diffconfNameSet = self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
         #read conf topic node name  into df
-        dfConf = pd.DataFrame(list(confTopicClass.confNameSet), index=None, columns=None)
+        dfConf = pd.DataFrame(list(diffconfNameSet), index=None, columns=None)
         
         #seNodeIds = pd.Series([]) #seNodeIds.values
         #get node Id for topic
-        '''
+        
         dfConf["nodeId"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
         print ("dfConf: ", dfConf.shape)
         dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header=False, index=False)
         
+        '''
         #read conf topic edge list into df
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
         
@@ -78,21 +79,23 @@ class graphCombNodesCls(object):
         nodeTypeId = nodeTypeCls.mediaTypesToIdMap[ingetTypeStr]
         oldtypeNodeIdSet = set()
         for nodeNameType in oldGraphNodeNameSet:
-            nodeTpId = int(nodeNameType.split('+')[1].strip())      #node type Id
+            nodeTpId = int(nodeNameType.split('+++')[1].strip())      #node type Id
             if nodeTypeId == nodeTpId:
                 oldtypeNodeIdSet.add(nodeNameType.lower())
         
         newconfNameSet = set()
         
         for nodeNameType in confNameSet:
-            nodeName = nodeNameType.split('+')[0].lower().strip()
-            nodeTypeId = nodeNameType.split('+')[1]
+            nodeName = nodeNameType.split('+++')[0].lower().strip()
+            #nodeTypeId = nodeNameType.split('+++')[1]
             for nodeNameTypeOld in oldtypeNodeIdSet:
-                if nodeName in nodeNameTypeOld:
+                if nodeName in nodeNameTypeOld:                 #get common nodes for joining               
                     #modify nodeName 
-                    nodeNameType = nodeNameTypeOld
+                    #nodeNameType = nodeNameTypeOld
                     newconfNameSet.add(nodeNameType)
-        return newconfNameSet
+                    break
+        
+        return confNameSet - newconfNameSet     #delete duplicates nodenametype
     
     
 def main():

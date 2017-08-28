@@ -85,8 +85,8 @@ class parserDblpXmlCls:
                     #get relations of author <--> paper
                     for a in authors:
                         # author <--> paper
-                        nodeA = a + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
-                        nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
+                        nodeA = a + "+++"+ str(nodeTypeCls.commonTypeToIdMap["people"])
+                        nodeTitle = title + "+++"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                         
                         if nodeA not in parserDblpXmlCls.graphNodeNameToIdMap:
                             parserDblpXmlCls.graphNodeNameToIdMap[nodeA] = parserDblpXmlCls.startNodeId
@@ -103,8 +103,8 @@ class parserDblpXmlCls:
                     for a1 in authors:
                         for a2 in authors:
                             if a1 != a2:
-                                nodeA1 = a1 + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
-                                nodeA2 = a2 + "+"+ str(nodeTypeCls.commonTypeToIdMap["people"])
+                                nodeA1 = a1 + "+++"+ str(nodeTypeCls.commonTypeToIdMap["people"])
+                                nodeA2 = a2 + "+++"+ str(nodeTypeCls.commonTypeToIdMap["people"])
                                                        
                                 if nodeA1 not in parserDblpXmlCls.graphNodeNameToIdMap:
                                     parserDblpXmlCls.graphNodeNameToIdMap[nodeA1] = parserDblpXmlCls.startNodeId
@@ -120,8 +120,8 @@ class parserDblpXmlCls:
 
                 #get relations of paper title <--> mediaTypeName
                 if len(mediaType) is not 0 and len(mediaName) is not 0 and title is not '':
-                    nodeM = mediaName + "+"+ str(nodeTypeCls.mediaTypesToIdMap[mediaType])
-                    nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
+                    nodeM = mediaName + "+++"+ str(nodeTypeCls.mediaTypesToIdMap[mediaType])
+                    nodeTitle = title + "+++"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                     if nodeM not in parserDblpXmlCls.graphNodeNameToIdMap:
                         parserDblpXmlCls.graphNodeNameToIdMap[nodeM] = parserDblpXmlCls.startNodeId
                         parserDblpXmlCls.startNodeId += 1
@@ -142,8 +142,8 @@ class parserDblpXmlCls:
                 #get relations of node time <--> paper title
                 if len(year) is not 0 and title is not '':
                     month = monthToDigitMap[month] if month in monthToDigitMap else month            #if month value is missing
-                    nodeTime = month + '/' + year + '+' + str(nodeTypeCls.commonTypeToIdMap["time"]) 
-                    nodeTitle = title + "+"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
+                    nodeTime = month + '/' + year + '+++' + str(nodeTypeCls.commonTypeToIdMap["time"]) 
+                    nodeTitle = title + "+++"+ str(nodeTypeCls.commonTypeToIdMap["paper"])
                     if nodeTime not in parserDblpXmlCls.graphNodeNameToIdMap:
                         parserDblpXmlCls.graphNodeNameToIdMap[nodeTime] = parserDblpXmlCls.startNodeId
                         parserDblpXmlCls.startNodeId += 1

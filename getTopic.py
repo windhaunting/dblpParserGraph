@@ -39,12 +39,12 @@ class confTopicClass(object):
         #print (df.columns[0])
        #print (df.values)
         abbreName = df.columns[0].split('-')[0].lower().strip()
-        nodeAbbreName = abbreName + "+" + str(nodeTypeCls.mediaTypesToIdMap["article"])    #conference but in the journal tag
+        nodeAbbreName = abbreName + "+++" + str(nodeTypeCls.mediaTypesToIdMap["article"])    #conference but in the journal tag
         if nodeAbbreName not in confTopicClass.confNameSet:
             confTopicClass.confNameSet.add(nodeAbbreName)
         for val in df.values:
             #print ("val: ", val)
-            nodeTopic = val[0].lower().strip() + "+" + str(nodeTypeCls.commonTypeToIdMap["topic"])
+            nodeTopic = val[0].lower().strip() + "+++" + str(nodeTypeCls.commonTypeToIdMap["topic"])
             edgeProp = "same"
             confTopicClass.conferenceNameToTopicEdgeLst.append([nodeAbbreName, nodeTopic, edgeProp])
             confTopicClass.conferenceNameToTopicEdgeLst.append([nodeTopic, nodeAbbreName, edgeProp])
