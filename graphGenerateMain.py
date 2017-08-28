@@ -33,9 +33,9 @@ class graphCombNodesCls(object):
     
         #write type and type Id 
     def readEdgeListFile(self, oldNodeNameToIdFile, oldEdgeListFile, newOutNodeNameToIdFile, newOutEdgeListFile):
-        df = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t')
+        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t')
         
-        graphNodeMaxNodeIdCurrent = len(df)         #node number
+        graphNodeMaxNodeIdCurrent = len(dfOldNodeNameId)         #node number
         print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent)
                 
         #remove file first
@@ -47,12 +47,20 @@ class graphCombNodesCls(object):
 
         #get conference topic nodeName
         confTopicObj = confTopicClass()
-        confTopicObj.executeMainFunction()        
+        confTopicObj.executeMainFunction() 
+        
+        #read         
+
+        #get from oldNodeNameToIdFile file
+        oldGraphNodeNameSet = dfOldNodeNameId.ix[:,0]
+        print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
+        self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
         #read conf topic node name  into df
         dfConf = pd.DataFrame(list(confTopicClass.confNameSet), index=None, columns=None)
         
         #seNodeIds = pd.Series([]) #seNodeIds.values
         #get node Id for topic
+        '''
         dfConf["nodeId"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
         print ("dfConf: ", dfConf.shape)
         dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header=False, index=False)
@@ -61,16 +69,17 @@ class graphCombNodesCls(object):
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
         
         print ("dfConfEdge: ", dfConfEdge)
-        dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
+       # dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
+        '''
         
-    #given node type in the outer conf, we get the nodeName and node Id
-    def getConferenNameFromType(ingetTypeStr = 'article', oldGraphNodeNameSet, confNameSet):
+    #given node type in the outer conf, we get the new nodeName without previous
+    def getConferenNameTopicFromType(self, ingetTypeStr, oldGraphNodeNameSet, confNameSet):
         #get nodeType Id
         nodeTypeId = nodeTypeCls.mediaTypesToIdMap[ingetTypeStr]
         oldtypeNodeIdSet = set()
         for nodeNameType in oldGraphNodeNameSet:
             nodeTpId = int(nodeNameType.split('+')[1].strip())      #node type Id
-            if nodeType == nodeTpId:
+            if nodeTypeId == nodeTpId:
                 oldtypeNodeIdSet.add(nodeNameType.lower())
         
         newconfNameSet = set()
@@ -79,7 +88,7 @@ class graphCombNodesCls(object):
             nodeName = nodeNameType.split('+')[0].lower().strip()
             nodeTypeId = nodeNameType.split('+')[1]
             for nodeNameTypeOld in oldtypeNodeIdSet:
-                if nodeName in nodeNameOld:
+                if nodeName in nodeNameTypeOld:
                     #modify nodeName 
                     nodeNameType = nodeNameTypeOld
                     newconfNameSet.add(nodeNameType)
