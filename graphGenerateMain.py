@@ -33,11 +33,10 @@ class graphCombNodesCls(object):
     
         #write type and type Id 
     def readEdgeListFile(self, oldNodeNameToIdFile, oldEdgeListFile, newOutNodeNameToIdFile, newOutEdgeListFile):
-        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t')
-        
+        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t')        
         graphNodeMaxNodeIdCurrent = len(dfOldNodeNameId)         #node number
         print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent)
-        #remove file first
+        #remove  newOutNodeNameToIdFile file first
         os.remove(newOutNodeNameToIdFile) if os.path.exists(newOutNodeNameToIdFile) else None
 
         #cp old into file into file first
@@ -55,25 +54,30 @@ class graphCombNodesCls(object):
         print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
         diffconfNameSet = self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
         #read conf topic node name  into df
-        dfConf = pd.DataFrame(list(diffconfNameSet), index=None, columns=None)
+        dfConf = pd.DataFrame(list(diffconfNameSet), index=None, columns= ["node_name"])
         
         #seNodeIds = pd.Series([]) #seNodeIds.values
         #get node Id for topic
-        
-        dfConf["nodeId"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
+        dfConf["node_id"] = [i for i in range(graphNodeMaxNodeIdCurrent+1, len(dfConf)+graphNodeMaxNodeIdCurrent+1)] 
         print ("dfConf: ", dfConf.shape)
-        dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header=False, index=False)
-        
+        dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header= None, index=False)
         
         #read old edge list into df
-        dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
+        #dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
         
-        print ("len(oldEdgeListFile): ", len(oldEdgeListFile))
-        
-        '''
         #write conf topic edge list into df
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=None)
+        dfConfEdge.ix[:,0].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"])
         
+        #modify the 
+        print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge.ix[:,0])
+        
+        #remove newOutEdgeListFile file first
+        os.remove(newOutEdgeListFile) if os.path.exists(newOutEdgeListFile) else None
+
+        #get 
+        '''
+
         print ("dfConfEdge: ", dfConfEdge)
        # dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
         '''
