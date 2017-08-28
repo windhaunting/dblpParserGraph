@@ -18,7 +18,7 @@ class confTopicClass(object):
    
     #abbreviation name --> to topic edge list
     conferenceNameToTopicEdgeLst = []
-    confName = set()
+    confNameSet = set()
     
     def __init__(self):
       pass
@@ -40,8 +40,8 @@ class confTopicClass(object):
        #print (df.values)
         abbreName = df.columns[0].split('-')[0].lower().strip()
         nodeAbbreName = abbreName + "+" + str(nodeTypeCls.mediaTypesToIdMap["article"])    #conference but in the journal tag
-        if nodeAbbreName not in confTopicClass.confName:
-            confTopicClass.confName.add(nodeAbbreName)
+        if nodeAbbreName not in confTopicClass.confNameSet:
+            confTopicClass.confNameSet.add(nodeAbbreName)
         for val in df.values:
             #print ("val: ", val)
             edgeProp = "same"
@@ -49,18 +49,17 @@ class confTopicClass(object):
             confTopicClass.conferenceNameToTopicEdgeLst.append([val, abbreName, edgeProp])
         
             nodeTopic = val[0].lower().strip() + "+" + str(nodeTypeCls.commonTypeToIdMap["topic"])
-            if nodeTopic not in confTopicClass.confName:
-                confTopicClass.confName.add(nodeTopic)
+            if nodeTopic not in confTopicClass.confNameSet:
+                confTopicClass.confNameSet.add(nodeTopic)
         
-    
-
+    #main function execute
+    def executeMainFunction(self):
+        filePaths = "/home/fubao/workDir/ResearchProjects/GraphQuerySearchRelatedPractice/Data/dblpParserGraph/input/conferenceTopicFile/"
+        self.readConfTopics(filePaths)
+        
 def main():
-    
     confTopicObj = confTopicClass()
-    
-    filePaths = "/home/fubao/workDir/ResearchProjects/GraphQuerySearchRelatedPractice/Data/dblpParserGraph/input/conferenceTopicFile/"
-    confTopicObj.readConfTopics(filePaths)
-    
+    confTopicObj.executeMainFunction()
     
     
 if __name__== "__main__":
