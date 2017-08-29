@@ -185,12 +185,12 @@ class parserDblpXmlCls:
         #write into outNodeNameToIdFile
         os.remove(outNodeNameToIdFile) if os.path.exists(outNodeNameToIdFile) else None
         df = pd.DataFrame.from_dict(parserDblpXmlCls.graphNodeNameToIdMap, orient='index')
-        df.to_csv(outNodeNameToIdFile, header = ["node Id"], sep='\t', index=True)
+        df.to_csv(outNodeNameToIdFile, header = ["node_id"], sep='\t', index=True)
         
         #write into outEdgeListFile
         os.remove(outEdgeListFile) if os.path.exists(outEdgeListFile) else None
         df = pd.DataFrame(list(parserDblpXmlCls.edgeList))
-        df.to_csv(outEdgeListFile, header = ["node Id source", "node Id dst", "edge hierarchical prop"], sep='\t', index=False)
+        df.to_csv(outEdgeListFile, header = ["node_src_id", "node_dst_id", "edge_prop"], sep='\t', index=False)
         
 
     

@@ -66,19 +66,21 @@ class graphCombNodesCls(object):
         print ("dfConf: ", dfConf.shape)
         dfConf.to_csv(newOutNodeNameToIdFile, mode='a', sep='\t', header= None, index=False)
         
-        
         #final nodeNameId df
-        dfGraphNodeNameIdFinal = pd.concat([dfOldNodeNameId, dfConf])
+        dfGraphNodeNameIdFinal = pd.concat([dfOldNodeNameId, dfConf],  ignore_index=True)
         #print ("dfGraphNodeNameIdFinal : ", dfGraphNodeNameIdFinal["node_id"])
         #read old edge list into df
         #dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
         
         #write conf topic edge list into df
         
-        print ("bbbbbbbbbbbbbbbbbbbbbb: ", dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "pvldb+++5"]["node_id"])
+        print ("bbbbbbbbbbbbbbbbbbbbbb: ",dfOldNodeNameId.shape, dfConf.shape, dfGraphNodeNameIdFinal.shape, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "pvldb+++5"]["node_id"])
+        print ("bbbbbbbbbbbbbbbbbbbbbb: ", dfGraphNodeNameIdFinal)
+
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
         #dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         #dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
+        
         
         dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
