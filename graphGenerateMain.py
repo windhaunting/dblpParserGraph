@@ -9,7 +9,7 @@ Created on Sun Aug 27 23:17:12 2017
 import os
 import pandas as pd
 from blist import blist
-
+import numpy as np
 from commons import writeListRowToFileWriterTsv
 from dblpParser import nodeTypeCls
 from getTopic import confTopicClass
@@ -74,13 +74,15 @@ class graphCombNodesCls(object):
         #dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
         
         #write conf topic edge list into df
+        
+        print ("xxxxxxxxxxx: ", dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "vldb+++5"]["node_id"])
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
         #dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         #dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         
         dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
-
-        #modify the 
+        dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
+        
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
            
             
@@ -97,10 +99,13 @@ class graphCombNodesCls(object):
         if len(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values) != 0:
             return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         else:
-            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x), x)
-            if "vldb+++5" in conferNameToOldMap:
-                print ("aYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap["vldb+++5"]) 
-            return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values[0]) 
+            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x), type(conferNameToOldMap[x]), x, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values)
+            #if x == "vldb+++5" and x in conferNameToOldMap:
+            #    print ("asYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap[x], dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values ) 
+            if np.isnan(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values):
+                return -1
+            else:
+                return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values[0])
         
     #given node type in the outer conf, we get the new nodeName without previous
     def getConferenNameTopicFromType(self, ingetTypeStr, oldGraphNodeNameSet, confNameSet):
