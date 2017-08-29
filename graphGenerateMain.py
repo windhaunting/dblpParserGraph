@@ -45,7 +45,7 @@ class graphCombNodesCls(object):
 
         #cp old into file into file first
         copyfile(oldNodeNameToIdFile, newOutNodeNameToIdFile)
-        #copyfile(oldEdgeListFile, newOutEdgeListFile)
+        copyfile(oldEdgeListFile, newOutEdgeListFile)
 
         #get conference topic nodeName
         confTopicObj = confTopicClass()
@@ -75,7 +75,7 @@ class graphCombNodesCls(object):
         
         #write conf topic edge list into df
         
-        print ("xxxxxxxxxxx: ", dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "vldb+++5"]["node_id"])
+        print ("bbbbbbbbbbbbbbbbbbbbbb: ", dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "vldb+++5"]["node_id"])
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
         #dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         #dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
@@ -84,7 +84,7 @@ class graphCombNodesCls(object):
         dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
-           
+        
             
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
 
