@@ -70,10 +70,8 @@ class graphCombNodesCls(object):
         dfGraphNodeNameIdFinal = pd.concat([dfOldNodeNameId, dfConf],  ignore_index=True)
         #print ("dfGraphNodeNameIdFinal : ", dfGraphNodeNameIdFinal["node_id"])
         #read old edge list into df
-        #dfOldEdgeList = pd.read_csv(oldEdgeListFile, delimiter = '\t')
         
         #write conf topic edge list into df
-        
         #print ("bbbbbbbbbbbbbbbbbbbbbb: ",dfOldNodeNameId.shape, dfConf.shape, dfGraphNodeNameIdFinal.shape, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "pvldb+++5"]["node_id"])
 
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])        
@@ -119,10 +117,6 @@ class graphCombNodesCls(object):
                     break
         diffconfNameSet = confNameSet - newconfNameSet
         
-        if "database+++3" in confNameSet:
-            print ("Yessssssssssssssssssssssssssss")
-        if "vldb+++5" in conferNameToOldMap:
-            print ("aYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap["vldb+++5"])    
         return diffconfNameSet, conferNameToOldMap     #delete duplicates nodenametype
     
     
