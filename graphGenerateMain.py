@@ -74,36 +74,21 @@ class graphCombNodesCls(object):
         
         #write conf topic edge list into df
         
-        print ("bbbbbbbbbbbbbbbbbbbbbb: ",dfOldNodeNameId.shape, dfConf.shape, dfGraphNodeNameIdFinal.shape, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "pvldb+++5"]["node_id"])
-        print ("bbbbbbbbbbbbbbbbbbbbbb: ", dfGraphNodeNameIdFinal)
+        #print ("bbbbbbbbbbbbbbbbbbbbbb: ",dfOldNodeNameId.shape, dfConf.shape, dfGraphNodeNameIdFinal.shape, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == "pvldb+++5"]["node_id"])
 
-        dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])
-        #dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
-        #dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
-        
+        dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])        
         
         dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
         
-            
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
-
-        #get 
-        '''
-
-        print ("dfConfEdge: ", dfConfEdge)
-       # dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
-        '''
     
     def format(self, x, dfGraphNodeNameIdFinal, conferNameToOldMap):
         if len(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values) != 0:
             return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         else:
-            print ("xxxxxxxxxxxxxaaaaaaaaaa: ", type(x), type(conferNameToOldMap[x]), x, dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values)
-            #if x == "vldb+++5" and x in conferNameToOldMap:
-            #    print ("asYesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", conferNameToOldMap[x], dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values ) 
             if np.isnan(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values):
                 return -1
             else:
