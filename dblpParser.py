@@ -184,9 +184,8 @@ class parserDblpXmlCls:
         
         #write into outNodeNameToIdFile
         os.remove(outNodeNameToIdFile) if os.path.exists(outNodeNameToIdFile) else None
-        parserDblpXmlCls.gNodeIdToNameMap = dict(map(reversed, parserDblpXmlCls.graphNodeNameToIdMap.items()))
-
-        df = pd.DataFrame.from_dict(parserDblpXmlCls.gNodeIdToNameMap, orient='index')
+        
+        df = pd.DataFrame.from_dict(parserDblpXmlCls.graphNodeNameToIdMap, orient='index')
         #df.to_csv(outNodeNameToIdFile, header = ["node_id"], sep='\t', index=True)
         df.to_csv(outNodeNameToIdFile, header = None, sep='\t', index=True)
         
