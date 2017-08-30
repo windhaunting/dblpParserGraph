@@ -61,7 +61,7 @@ class parserDblpXmlCls:
                 
             if elem.tag == 'title':
                 if elem.text:
-    	               title = unidecode(elem.text).lower().strip() 
+    	               title = unidecode(elem.text).replace("\n", " ").lower().strip() 
             if elem.tag in mediaTypeToNameLstMap:
                 if elem.tag:
                     mediaType= unidecode(elem.tag).lower().strip()                 #specific conference, journal name
