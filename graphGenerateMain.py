@@ -33,9 +33,10 @@ class graphCombNodesCls(object):
     
         #write type and type Id 
     def readEdgeListFile(self, oldNodeNameToIdFile, oldEdgeListFile, newOutNodeNameToIdFile, newOutEdgeListFile):
-        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t') 
-        dfOldNodeNameId.rename(columns={'Unnamed: 0':'node_name'}, inplace=True)
-
+        dfOldNodeNameId = pd.read_csv(oldNodeNameToIdFile, delimiter = '\t', header = ["node_name", "node_id"]) 
+        #dfOldNodeNameId.rename(columns={'Unnamed: 0':'node_name'}, inplace=True)
+        #dfOldNodeNameId.rename(columns={'Unnamed: 1':'node_id'}, inplace=True)
+        
         graphNodeMaxNodeIdCurrent = len(dfOldNodeNameId)         #node number
         print ("graphNodeMaxNodeIdCurrent: ", graphNodeMaxNodeIdCurrent, dfOldNodeNameId.shape, dfOldNodeNameId.columns)
         #remove  newOutNodeNameToIdFile file first
