@@ -92,7 +92,8 @@ class graphCombNodesCls(object):
                 return -1
             else:
                 return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == conferNameToOldMap[x]]["node_id"].values[0])
-        
+    
+    
     #given node type in the outer conf, we get the new nodeName without previous
     def getConferenNameTopicFromType(self, ingetTypeStr, oldGraphNodeNameSet, confNameSet):
         #get nodeType Id
