@@ -56,7 +56,7 @@ class graphCombNodesCls(object):
 
         #get from oldNodeNameToIdFile file
         oldGraphNodeNameSet = dfOldNodeNameId.ix[:,0]
-        print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
+        #print ("oldGraphNodeNameSet: ", oldGraphNodeNameSet)
         diffconfNameSet, conferNameToOldMap = self.getConferenNameTopicFromType('article', oldGraphNodeNameSet, confTopicObj.confNameSet)
         #read conf topic node name  into df
         dfConf = pd.DataFrame(list(diffconfNameSet), index=None, columns= ["node_name"])
@@ -77,10 +77,13 @@ class graphCombNodesCls(object):
 
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])        
         
+        print ("dfConfEdge : ", dfConfEdge.shape, dfConfEdge.head(10))
+        
         dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.formatData(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.formatData(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
+        print ("dfConfEdge22 : ", dfConfEdge.shape, dfConfEdge.head(10))
         
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
     
