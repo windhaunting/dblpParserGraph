@@ -50,10 +50,10 @@ class confTopicClass(object):
             edgeProp = "same"
             confTopicClass.conferenceNameToTopicEdgeLst.append([nodeAbbreName, nodeTopic, edgeProp])
             confTopicClass.conferenceNameToTopicEdgeLst.append([nodeTopic, nodeAbbreName, edgeProp])
-        
+          
             if nodeTopic not in confTopicClass.confNameSet:
                 confTopicClass.confNameSet.add(nodeTopic)
-        
+        #print (" conferenceNameToTopicEdgeLst: ", len(confTopicClass.conferenceNameToTopicEdgeLst), confTopicClass.conferenceNameToTopicEdgeLst[:10])
     #main function execute
     def executeMainFunction(self):
         filePaths = "/home/fubao/workDir/ResearchProjects/GraphQuerySearchRelatedPractice/Data/dblpParserGraph/input/conferenceTopicFile/"

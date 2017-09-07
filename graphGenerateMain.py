@@ -77,14 +77,14 @@ class graphCombNodesCls(object):
 
         dfConfEdge = pd.DataFrame(confTopicClass.conferenceNameToTopicEdgeLst, index=None, columns=["node_src_id", "node_dst_id", "edge_prop"])        
         
-        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
-        dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.format(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
+        dfConfEdge["node_src_id"] = dfConfEdge["node_src_id"].map(lambda x: self.formatData(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
+        dfConfEdge["node_dst_id"] = dfConfEdge["node_dst_id"].map(lambda x: self.formatData(x, dfGraphNodeNameIdFinal, conferNameToOldMap))
         
         #print ("len(oldEdgeListFile): ", len(oldEdgeListFile), dfConfEdge["node_src_id"], dfConfEdge["node_dst_id"])
         
         dfConfEdge.to_csv(newOutEdgeListFile, mode='a', sep='\t', header=False, index=False)
     
-    def format(self, x, dfGraphNodeNameIdFinal, conferNameToOldMap):
+    def formatData(self, x, dfGraphNodeNameIdFinal, conferNameToOldMap):
         if len(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values) != 0:
             return int(dfGraphNodeNameIdFinal[dfGraphNodeNameIdFinal["node_name"] == x]["node_id"].values[0])
         else:
